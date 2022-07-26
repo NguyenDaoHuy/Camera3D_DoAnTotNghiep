@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AR 3D</string>
+    <string name="You_need_open_setting_to_grant_permission">You need open setting to grant permission!</string>
+</resources>

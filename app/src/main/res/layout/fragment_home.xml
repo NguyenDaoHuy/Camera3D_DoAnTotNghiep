@@ -1,14 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.home_fragment.HomeFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <data>
+           <variable
+               name="homeViewModel"
+               type="com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel" />
+    </data>
 
-</FrameLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="8.5">
+              <androidx.camera.view.PreviewView
+                  android:id="@+id/viewFinder"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"/>
+
+              <RelativeLayout
+                  android:layout_width="70dp"
+                  android:layout_height="70dp"
+                  android:layout_alignParentBottom="true"
+                  android:layout_centerHorizontal="true"
+                  android:layout_marginBottom="15dp"
+                  android:background="@drawable/custom_btn_take_photo"
+                  android:onClick="@{()->homeViewModel.onCLickTakePhoto()}">
+                  <ImageView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerInParent="true"
+                      android:src="@drawable/ic_camera" />
+              </RelativeLayout>
+          </RelativeLayout>
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1.5"
+              android:orientation="horizontal">
+              <RelativeLayout
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:background="?attr/selectableItemBackground"
+                  android:gravity="center_vertical"
+                  android:onClick="@{() -> homeViewModel.onCLickGallery()}">
+                  <ImageView
+                      android:id="@+id/imgGallery"
+                      android:layout_width="match_parent"
+                      android:layout_height="50dp"
+                      android:src="@drawable/icon_gallery" />
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/imgGallery"
+                      android:text="Gallery"
+                      android:layout_centerHorizontal="true"
+                      android:textSize="18dp"
+                      android:textColor="@color/black"
+                      android:textStyle="bold"/>
+              </RelativeLayout>
+              <RelativeLayout
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:background="?attr/selectableItemBackground"
+                  android:onClick="@{() -> homeViewModel.onCLickArObject()}">
+
+                  <ImageView
+                      android:id="@+id/imgArObject"
+                      android:layout_width="match_parent"
+                      android:layout_height="50dp"
+                      android:src="@drawable/icon_ar_object" />
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/imgArObject"
+                      android:text="AR Object"
+                      android:layout_centerHorizontal="true"
+                      android:textSize="18dp"
+                      android:textColor="@color/black"
+                      android:textStyle="bold"/>
+              </RelativeLayout>
+              <RelativeLayout
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:background="?attr/selectableItemBackground"
+                  android:onClick="@{() -> homeViewModel.onCLickShare()}">
+                  <ImageView
+                      android:id="@+id/imgShare"
+                      android:layout_width="match_parent"
+                      android:layout_height="50dp"
+                      android:src="@drawable/icon_share" />
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/imgShare"
+                      android:layout_centerHorizontal="true"
+                      android:text="Share"
+                      android:textColor="@color/black"
+                      android:textSize="18dp"
+                      android:textStyle="bold" />
+              </RelativeLayout>
+          </LinearLayout>
+
+   </LinearLayout>
+</layout>

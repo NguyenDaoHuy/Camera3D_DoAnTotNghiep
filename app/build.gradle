@@ -103,4 +103,8 @@ dependencies {
 
     implementation("com.android.support:multidex:$multidex_version")
     kapt 'com.android.databinding:compiler:3.1.4'
+
+    implementation"androidx.camera:camera-camera2:1.1.0-alpha03"
+    implementation"androidx.camera:camera-lifecycle:1.1.0-alpha03"
+    implementation"androidx.camera:camera-view:1.0.0-alpha23"
 }

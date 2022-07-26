@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.ui.base.AnimationScreen
 import com.bhsoft.ar3d.ui.base.fragment.BaseFragment
+import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeFragment
 import com.bhsoft.ar3d.ui.main.user.UserFragment
 //******************************
 //******************************
@@ -28,7 +29,7 @@ object OpenFragmentUtils {
         BaseFragment.openFragment(
             manager,
             transaction,
-            UserFragment::class.java,
+            HomeFragment::class.java,
             null,
             false,
             true,

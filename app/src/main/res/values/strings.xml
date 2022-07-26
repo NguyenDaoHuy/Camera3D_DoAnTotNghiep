@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">AR 3D</string>
     <string name="You_need_open_setting_to_grant_permission">You need open setting to grant permission!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

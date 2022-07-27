@@ -5,6 +5,7 @@ import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.ui.base.AnimationScreen
 import com.bhsoft.ar3d.ui.base.fragment.BaseFragment
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
+import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeFragment
 
 //******************************
 //******************************
@@ -29,7 +30,7 @@ object OpenFragmentUtils {
         BaseFragment.openFragment(
             manager,
             transaction,
-            CameraFragment::class.java,
+            HomeFragment::class.java,
             null,
             false,
             true,

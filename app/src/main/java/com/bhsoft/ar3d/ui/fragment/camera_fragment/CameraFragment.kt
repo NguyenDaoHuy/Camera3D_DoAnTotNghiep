@@ -1,5 +1,6 @@
 package com.bhsoft.ar3d.ui.fragment.camera_fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -33,6 +34,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     private lateinit var cameraExcutor:ExecutorService
     private lateinit var vibrator:Vibrator
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun initComponents() {
         getBindingData().cameraViewModel = mModel
         mModel.uiEventLiveData.observe(this){

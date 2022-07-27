@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bhsoft.ar3d.di.model.ViewModelFactory
 import com.bhsoft.ar3d.di.model.ViewModelKey
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraViewModel
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel
 import com.bhsoft.ar3d.ui.main.MainViewModel
 import com.bhsoft.ar3d.ui.main.user.UserViewModel
@@ -38,6 +39,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CameraViewModel::class)
     abstract fun bindsCameraViewModel(cameraViewModel: CameraViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GalleryViewModel::class)
+    abstract fun bindsGalleryViewModel(galleryViewModel: GalleryViewModel): ViewModel
 
     @Binds
     abstract fun bindsViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory

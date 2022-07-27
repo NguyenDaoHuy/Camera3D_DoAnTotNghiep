@@ -26,7 +26,8 @@
                 android:layout_gravity="fill"
                 android:onClick="@{() -> homeViewMocel.onCLickCamera()}"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                android:background="?attr/selectableItemBackground">
 
                 <RelativeLayout
                     android:layout_width="120dp"
@@ -59,7 +60,8 @@
                 android:layout_marginTop="40dp"
                 android:onClick="@{() -> homeViewMocel.onClickGallery()}"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                android:background="?attr/selectableItemBackground">
 
                 <RelativeLayout
                     android:layout_width="120dp"

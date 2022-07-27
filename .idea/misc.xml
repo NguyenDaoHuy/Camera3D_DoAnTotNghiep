@@ -12,8 +12,10 @@
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/drawable/ic_take_photo.xml" value="0.1425" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/dialog_confirm.xml" value="0.25" />
+        <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_gallery.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_home.xml" value="0.2" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_home2.xml" value="0.25" />
+        <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/item_image_from_gallery.xml" value="0.25" />
         <entry key="..\:/Project/BaseMVVM/app/src/main/res/layout/activity_main.xml" value="0.17604166666666668" />
         <entry key="..\:/Project/BaseMVVM/app/src/main/res/layout/dialog_confirm.xml" value="0.2" />
         <entry key="..\:/Project/BaseMVVM/app/src/main/res/layout/fragment_file.xml" value="0.17604166666666668" />

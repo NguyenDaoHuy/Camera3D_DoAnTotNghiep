@@ -1,6 +1,7 @@
 package com.bhsoft.ar3d.di.builder
 
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
 import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeFragment
 import com.bhsoft.ar3d.ui.main.user.UserFragment
 import dagger.Module
@@ -21,4 +22,7 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeCameraFragment(): CameraFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeGalleryFragment(): GalleryFragment
 }

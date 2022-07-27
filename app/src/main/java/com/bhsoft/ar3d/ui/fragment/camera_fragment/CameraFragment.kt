@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -115,21 +117,21 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
         takePhoto()
     }
 
-    private fun getOutputDirectory(): File{
-        val mediaDir = requireContext().externalMediaDirs.firstOrNull()?.let { mFile ->
-            File(mFile,resources.getString(R.string.app_name)).apply {
-                mkdirs()
-            }
+    @SuppressLint("NewApi")
+    private fun getOutputDirectory() : File{
+        val mediaStorageDir = File(getExternalStorageDirectory().toString() +"/"
+                +Environment.DIRECTORY_DCIM + "/${resources.getString(R.string.app_name)}/")
+        if (!mediaStorageDir.isDirectory){
+            mediaStorageDir.mkdirs()
         }
-        return if(mediaDir != null && mediaDir.exists())
-            mediaDir else requireContext().filesDir
+       return mediaStorageDir
     }
 
     //Chụp ảnh và lưu
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File(
-            outputDirectory, SimpleDateFormat(
+           outputDirectory, SimpleDateFormat(
                 Constants.FILE_NAME_FORMAT,
                 Locale.getDefault())
                 .format(System.currentTimeMillis()) + ".jpg"
@@ -143,7 +145,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    initToast("Photo Saved"+savedUri)
+                    initToast("Photo Saved $savedUri")
                 }
 
                 override fun onError(exception: ImageCaptureException) {

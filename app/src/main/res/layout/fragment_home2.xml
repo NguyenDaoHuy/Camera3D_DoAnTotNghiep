@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+         <variable
+             name="homeViewMocel"
+             type="com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_home_3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:onClick="@{() -> homeViewMocel.onCLickCamera()}"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="120dp"
+                    android:layout_height="120dp">
+
+                    <ImageView
+                        android:id="@+id/icon_camera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/icon_camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/icon_camera"
+                        android:layout_centerHorizontal="true"
+                        android:text="Camera"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:layout_marginTop="40dp"
+                android:onClick="@{() -> homeViewMocel.onClickGallery()}"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="120dp"
+                    android:layout_height="120dp">
+
+                    <ImageView
+                        android:id="@+id/icon_gallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/icon_gallery" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/icon_gallery"
+                        android:layout_centerHorizontal="true"
+                        android:text="Gallery"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

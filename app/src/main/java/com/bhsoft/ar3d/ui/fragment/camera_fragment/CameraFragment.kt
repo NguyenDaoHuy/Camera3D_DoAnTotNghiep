@@ -34,7 +34,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     private lateinit var vibrator:Vibrator
 
     override fun initComponents() {
-        getBindingData().homeViewModel = mModel
+        getBindingData().cameraViewModel = mModel
         mModel.uiEventLiveData.observe(this){
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
@@ -141,7 +141,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    initToast("Photo Saved")
+                    initToast("Photo Saved"+savedUri)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -187,5 +187,8 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     override fun onDestroy() {
         super.onDestroy()
         cameraExcutor.isShutdown
+    }
+    companion object{
+        val TAG = CameraFragment::class.java.name
     }
 }

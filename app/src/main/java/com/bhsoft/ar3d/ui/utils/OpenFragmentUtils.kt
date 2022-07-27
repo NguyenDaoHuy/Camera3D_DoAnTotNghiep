@@ -4,8 +4,8 @@ import androidx.fragment.app.FragmentManager
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.ui.base.AnimationScreen
 import com.bhsoft.ar3d.ui.base.fragment.BaseFragment
-import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeFragment
-import com.bhsoft.ar3d.ui.main.user.UserFragment
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
+
 //******************************
 //******************************
 //***** Create by cuongpq  *****
@@ -29,7 +29,7 @@ object OpenFragmentUtils {
         BaseFragment.openFragment(
             manager,
             transaction,
-            HomeFragment::class.java,
+            CameraFragment::class.java,
             null,
             false,
             true,

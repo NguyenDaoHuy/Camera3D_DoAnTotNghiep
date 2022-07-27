@@ -5,7 +5,7 @@
     <data>
            <variable
                name="homeViewModel"
-               type="com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel" />
+               type="com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraViewModel" />
     </data>
 
    <LinearLayout

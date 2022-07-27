@@ -1,6 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.home_fragment
-
-import java.util.jar.Manifest
+package com.bhsoft.ar3d.ui.fragment.camera_fragment
 
 object Constants {
     const val TAG = "cameraX"

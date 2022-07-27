@@ -1,4 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.home_fragment
+package com.bhsoft.ar3d.ui.fragment.camera_fragment
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -26,7 +26,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack {
+class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),CameraCallBack {
 
     private var imageCapture : ImageCapture? = null
     private lateinit var outputDirectory: File
@@ -38,10 +38,10 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
         mModel.uiEventLiveData.observe(this){
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
-                HomeViewModel.ON_CLICK_GALLERY -> goToGallery()
-                HomeViewModel.ON_CLICK_AR_OBJECT -> goToArObject()
-                HomeViewModel.ON_CLICK_SHARE -> goToShare()
-                HomeViewModel.ON_CLICK_TAKE_PHOTO -> onClickTakePhoto()
+                CameraViewModel.ON_CLICK_GALLERY -> goToGallery()
+                CameraViewModel.ON_CLICK_AR_OBJECT -> goToArObject()
+                CameraViewModel.ON_CLICK_SHARE -> goToShare()
+                CameraViewModel.ON_CLICK_TAKE_PHOTO -> onClickTakePhoto()
             }
         }
         checkPermissionGranted()
@@ -173,8 +173,8 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
 
     override fun getBindingData() = mBinding as FragmentHomeBinding
 
-    override fun getViewModel(): Class<HomeViewModel> {
-        return HomeViewModel::class.java
+    override fun getViewModel(): Class<CameraViewModel> {
+        return CameraViewModel::class.java
     }
 
     override fun error(id: String, error: Throwable) {

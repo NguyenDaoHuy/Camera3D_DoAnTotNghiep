@@ -1,4 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.home_fragment
+package com.bhsoft.ar3d.ui.fragment.camera_fragment
 
 import com.bhsoft.ar3d.data.local.AppDatabase
 import com.bhsoft.ar3d.data.remote.InteractCommon
@@ -6,11 +6,11 @@ import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class CameraViewModel @Inject constructor(
     appDatabase: AppDatabase,
     interactCommon: InteractCommon,
     scheduler: Executor
-) : BaseViewModel<HomeCallBack>(appDatabase, interactCommon, scheduler) {
+) : BaseViewModel<CameraCallBack>(appDatabase, interactCommon, scheduler) {
     companion object{
         const val ON_CLICK_GALLERY = 1
         const val ON_CLICK_AR_OBJECT = 2

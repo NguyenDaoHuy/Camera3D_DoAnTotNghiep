@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_launcher"
+                android:id="@+id/imgThumbBig"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hautranvan.jpg"
+                android:layout_below="@id/imgThumbBig"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:maxWidth="110dp"
+                android:id="@+id/txtNameFileThumbBig"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

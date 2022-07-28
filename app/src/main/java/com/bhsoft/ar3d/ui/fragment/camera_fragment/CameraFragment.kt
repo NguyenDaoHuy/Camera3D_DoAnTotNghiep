@@ -1,5 +1,6 @@
 package com.bhsoft.ar3d.ui.fragment.camera_fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -22,8 +23,8 @@ import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.databinding.FragmentHomeBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
 import java.io.File
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -63,23 +64,23 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     }
     //check Permission Camera
     private fun checkPermissionGranted(){
-        if(allPermissionGranted()){
+        if(checkPermission()){
             startCamera()
         }else{
             ActivityCompat.requestPermissions(requireActivity(),Constants.REQUIRED_PERMISSIONS,Constants.REQUEST_CODE_PERMISSIONS)
         }
     }
-    private fun allPermissionGranted() =
-        Constants.REQUIRED_PERMISSIONS.all {
-            ContextCompat.checkSelfPermission(requireContext(),it) == PackageManager.PERMISSION_GRANTED
-        }
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun checkPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(context!!, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray) {
         if(requestCode == Constants.REQUEST_CODE_PERMISSIONS){
-            if(allPermissionGranted()){
+            if(checkPermission()){
                 startCamera()
             }else{
                 initToast("Permissions not granted by the user.")
@@ -165,7 +166,11 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     }
 
     private fun goToGallery() {
-        initToast("Gallery")
+        val galleryFragment = GalleryFragment()
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.content,galleryFragment)
+        fragmentTransaction.addToBackStack(GalleryFragment.TAG)
+        fragmentTransaction.commit()
     }
 
     override fun getLayoutMain(): Int {

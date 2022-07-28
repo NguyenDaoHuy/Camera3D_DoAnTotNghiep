@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
        <variable
@@ -12,24 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <RelativeLayout
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            app:title="Gallery"
+            android:id="@+id/toolBarGallery"
+            app:titleTextColor="@color/white"
             android:background="#EF7C8E">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gallery"
-                android:layout_centerInParent="true"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                android:layout_marginLeft="20dp"/>
-        </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+       <androidx.recyclerview.widget.RecyclerView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:id="@+id/recylerFileName"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"/>
+            android:id="@+id/recylerThumbnailSmall"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recylerThumbnailBig"/>
     </LinearLayout>
 </layout>

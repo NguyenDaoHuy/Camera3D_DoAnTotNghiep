@@ -1,10 +1,10 @@
-package com.bhsoft.ar3d.ui.fragment.gallery_fragment
+package com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.data.model.Image
+import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.ItemImageFromGalleryBinding
 
 class GalleryAdapter(private val inter: IImageGallery) :
@@ -16,7 +16,7 @@ class GalleryAdapter(private val inter: IImageGallery) :
 
     interface IImageGallery {
         fun count(): Int
-        fun getData(position: Int): Image
+        fun getData(position: Int): Pictures
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -26,7 +26,7 @@ class GalleryAdapter(private val inter: IImageGallery) :
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val image = inter.getData(position)
-        holder.binding.image.setImageBitmap(BitmapFactory.decodeFile(image!!.path))
+        holder.binding.txtNameFile.text = image.title
     }
 
     override fun getItemCount(): Int {

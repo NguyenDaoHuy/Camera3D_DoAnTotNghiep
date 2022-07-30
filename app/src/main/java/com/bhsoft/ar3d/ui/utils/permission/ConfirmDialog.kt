@@ -38,27 +38,27 @@ class ConfirmDialog : Dialog, View.OnClickListener{
     }
 
     private fun inits(content: String) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.dialog_confirm)
-        findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
-        findViewById<View>(R.id.btn_ok).setOnClickListener(this)
-
-        (findViewById<View>(R.id.tv_content) as TextView).text = content
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        setContentView(R.layout.dialog_confirm)
+//        findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
+//        findViewById<View>(R.id.btn_ok).setOnClickListener(this)
+//
+//        (findViewById<View>(R.id.tv_content) as TextView).text = content
     }
 
     override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_ok -> {
-                dismiss()
-                mInterf!!.onClickOk()
-            }
-            R.id.btn_cancel -> {
-                dismiss()
-                mInterf!!.onClickCancel()
-            }
-            else -> {
-            }
-        }
+//        when (view.id) {
+//            R.id.btn_ok -> {
+//                dismiss()
+//                mInterf!!.onClickOk()
+//            }
+//            R.id.btn_cancel -> {
+//                dismiss()
+//                mInterf!!.onClickCancel()
+//            }
+//            else -> {
+//            }
+//        }
     }
 
 

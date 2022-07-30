@@ -3,14 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/drawable/ic_back.xml" value="0.1695" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/activity_main.xml" value="0.12360688956433637" />
+        <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/dialog_change_image.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/dialog_confirm.xml" value="0.25416666666666665" />
+        <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/fragment_details_gallery.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/fragment_gallery.xml" value="0.176" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/fragment_home2.xml" value="0.14492753623188406" />
+        <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/fragment_user.xml" value="0.13269927536231885" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/item_image_from_gallery.xml" value="0.2" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/item_image_thumb_big_gallery.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/item_image_thumb_small_gallery.xml" value="0.25416666666666665" />
+        <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/layout/item_user.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID_KOTLIN/android3dar/app/src/main/res/menu/gallery_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/drawable/custom_btn_home.xml" value="0.169" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/drawable/custom_btn_take_photo.xml" value="0.1425" />

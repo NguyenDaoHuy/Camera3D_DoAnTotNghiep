@@ -18,6 +18,8 @@ class ThumbBigAdapter(private val inters :IThumBig)
         fun getCountBig():Int
         fun getDataBig(position:Int):Pictures
         fun getContextBig():Context
+        fun onClickItemThumBig(position: Int)
+        fun onLongClickChangeThumBigImage(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbBigViewHolder {
@@ -29,6 +31,13 @@ class ThumbBigAdapter(private val inters :IThumBig)
         val img = inters.getDataBig(position)
         holder.binding.txtNameFileThumbBig.text = img.title
         Glide.with(inters.getContextBig()).load(img.path).into(holder.binding.imgThumbBig)
+        holder.itemView.setOnClickListener {
+            inters.onClickItemThumBig(position)
+        }
+        holder.itemView.setOnLongClickListener {
+            inters.onLongClickChangeThumBigImage(position)
+            true
+        }
     }
 
     override fun getItemCount(): Int {

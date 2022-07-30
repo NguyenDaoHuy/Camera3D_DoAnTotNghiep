@@ -1,11 +1,21 @@
 package com.bhsoft.ar3d.ui.fragment.gallery_fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Bundle
+import android.provider.MediaStore
+import android.view.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,20 +24,38 @@ import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentGalleryBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
+import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
+import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragment
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
+import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel
+import java.io.File
 
 
 class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),GalleryCallBack,
     GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall{
-
+    private var dialog : Dialog?=null
     override fun initComponents() {
         getBindingData().galleryViewModel = mModel
-        mModel.getImages()
+        mModel.uiEventLiveData.observe(this){
+            when(it){
+                BaseViewModel.FINISH_ACTIVITY -> finishActivity()
+                GalleryViewModel.GET_DATA_IMAGE_SUCCESS -> getDataImageSuccess()
+            }
+        }
         initRecyclerViewImage()
+        initRecylerViewThumbBig()
+        initRecylerViewThumbSmall()
+        mModel.getImages()
         setHasOptionsMenu(true)
         customToolbar()
+    }
+
+    private fun getDataImageSuccess() {
+        getBindingData().recylerFileName.adapter!!.notifyDataSetChanged()
+        getBindingData().recylerThumbnailBig.adapter!!.notifyDataSetChanged()
+        getBindingData().recylerThumbnailSmall.adapter!!.notifyDataSetChanged()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -97,24 +125,22 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
     }
 
     private fun showListViewThumbnailBig() {
-        initRecylerViewThumbBig()
         getBindingData().recylerThumbnailBig.visibility = View.VISIBLE
         getBindingData().recylerFileName.visibility = View.GONE
         getBindingData().recylerThumbnailSmall.visibility = View.GONE
     }
 
     private fun showListViewThumbnailSmall() {
-        initRecylerViewThumbSmall()
         getBindingData().recylerThumbnailSmall.visibility = View.VISIBLE
         getBindingData().recylerFileName.visibility = View.GONE
         getBindingData().recylerThumbnailBig.visibility = View.GONE
     }
 
     private fun showListViewNameFile() {
-        initRecyclerViewImage()
         getBindingData().recylerFileName.visibility = View.VISIBLE
         getBindingData().recylerThumbnailBig.visibility = View.GONE
         getBindingData().recylerThumbnailSmall.visibility = View.GONE
+
     }
 
     override fun count(): Int {
@@ -124,6 +150,7 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
     override fun getData(position: Int): Pictures {
        return mModel.getFileImageList()[position]
     }
+
 
     override fun getCountBig(): Int {
         return mModel.getFileImageList().size
@@ -137,7 +164,6 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
     override fun getContextBig(): Context {
         return context!!
     }
-
     override fun getCountSmall(): Int {
         return mModel.getFileImageList().size
     }
@@ -149,5 +175,131 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
     @SuppressLint("UseRequireInsteadOfGet")
     override fun getContextSmall(): Context {
         return context!!
+    }
+
+    override fun onClickItem(position: Int) {
+        //Click image to details
+        val detailsFragment = DetailsGalleryFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("details", mModel.getFileImageList()[position])
+        detailsFragment.arguments = bundle
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction!!.replace(R.id.content, detailsFragment!!)
+        transaction!!.addToBackStack(DetailsGalleryFragment.TAG)
+        transaction!!.commit()
+    }
+
+
+
+    override fun onClickImageFileName(position: Int) {
+        val detailsFragment = DetailsGalleryFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("details", mModel.getFileImageList()[position])
+        detailsFragment.arguments = bundle
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction!!.replace(R.id.content, detailsFragment!!)
+        transaction!!.addToBackStack(DetailsGalleryFragment.TAG)
+        transaction!!.commit()
+    }
+
+    override fun onClickItemThumBig(position: Int) {
+        val detailsFragment = DetailsGalleryFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("details", mModel.getFileImageList()[position])
+        detailsFragment.arguments = bundle
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction!!.replace(R.id.content, detailsFragment!!)
+        transaction!!.addToBackStack(DetailsGalleryFragment.TAG)
+        transaction!!.commit()
+    }
+
+
+
+    @SuppressLint("UseRequireInsteadOfGet")
+    override fun onLongClickChangeFileNameImage(position: Int) {
+        showDialog()
+        val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
+        val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
+        val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        dialogRename.setOnClickListener {
+            mModel.onRenameFile(context!!,position)
+            dialog!!.dismiss()
+        }
+        dialogDelete.setOnClickListener {
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            dialog!!.dismiss()
+        }
+        dialogShare.setOnClickListener {
+            dialog!!.dismiss()
+            showMessage("Share")
+        }
+        dialog!!.show()
+    }
+    @SuppressLint("UseRequireInsteadOfGet")
+    override fun onLongClickChangeThumbSmallImage(position: Int) {
+        showDialog()
+        val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
+        val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
+        val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        dialogRename.setOnClickListener {
+            mModel.onRenameFile(context!!,position)
+            dialog!!.dismiss()
+        }
+        dialogDelete.setOnClickListener {
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            dialog!!.dismiss()
+        }
+        dialogShare.setOnClickListener {
+            dialog!!.dismiss()
+            showMessage("Share")
+        }
+        dialog!!.show()
+    }
+
+    @SuppressLint("UseRequireInsteadOfGet")
+    override fun onLongClickChangeThumBigImage(position: Int) {
+        showDialog()
+        val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
+        val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
+        val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        dialogRename.setOnClickListener {
+            mModel.onRenameFile(context!!,position)
+            dialog!!.dismiss()
+        }
+        dialogDelete.setOnClickListener {
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            dialog!!.dismiss()
+        }
+        dialogShare.setOnClickListener {
+            dialog!!.dismiss()
+            showMessage("Share")
+        }
+        dialog!!.show()
+    }
+
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun showDialog() {
+        dialog = Dialog(context!!)
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setContentView(R.layout.dialog_change_image)
+        val window = dialog!!.window ?: return
+        window.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val windowAtributes = window.attributes
+        windowAtributes.gravity = Gravity.CENTER
+        window.attributes = windowAtributes
+        if (Gravity.CENTER == Gravity.CENTER) {
+            dialog!!.setCancelable(true)
+        } else {
+            dialog!!.setCancelable(false)
+        }
+    }
+
+    override fun onResumeControl() {
+        super.onResumeControl()
+        mModel.getImages()
     }
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="detailsViewModel"
+            type="com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryViewModel" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:id="@+id/ln_actionbar"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:id="@+id/btn_back"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_back"
+                android:tint="@color/black"
+                android:padding="10dp"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/imgDetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/linear"
+            android:layout_below="@id/ln_actionbar"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@mipmap/ic_launcher" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/linear"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icon_share"
+                android:id="@+id/imgShare"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:onClick="@{()->detailsViewModel.onClickDelete()}"
+                android:src="@drawable/delete"
+                android:id="@+id/imgDelete"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

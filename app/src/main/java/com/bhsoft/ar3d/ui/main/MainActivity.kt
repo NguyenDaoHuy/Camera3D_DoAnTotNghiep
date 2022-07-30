@@ -15,6 +15,7 @@ import com.bhsoft.ar3d.databinding.ActivityMainBinding
 import com.bhsoft.ar3d.ui.base.activity.BaseMVVMActivity
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
 import com.bhsoft.ar3d.ui.utils.OpenFragmentUtils
+import com.bhsoft.ar3d.ui.utils.permission.PermissionGrantUtils
 
 class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBack {
 
@@ -32,6 +33,7 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
         CustomReadStoragePermision()
         CustomCameraPermission()
         CustomWritePermission()
+
     }
 
     private fun CustomWritePermission() {

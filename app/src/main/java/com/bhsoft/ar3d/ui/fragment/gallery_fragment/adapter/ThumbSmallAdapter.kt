@@ -21,6 +21,8 @@ class ThumbSmallAdapter(private val inters : IThumbSmall)
         fun getCountSmall() : Int
         fun getDataSmall(position:Int):Pictures
         fun getContextSmall():Context
+        fun onClickItem(position: Int)
+        fun onLongClickChangeThumbSmallImage(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbSmallViewHolder {
@@ -33,6 +35,13 @@ class ThumbSmallAdapter(private val inters : IThumbSmall)
       holder.binding.txtNameFileThumbSmall.text = pics.title
       holder.binding.txtLength.text = getSize(pics.sizes.toInt())
       Glide.with(inters.getContextSmall()).load(pics.path).into(holder.binding.imgThumbSmall)
+        holder.itemView.setOnClickListener {
+            inters.onClickItem(position)
+        }
+        holder.itemView.setOnLongClickListener {
+            inters.onLongClickChangeThumbSmallImage(position)
+            true
+        }
     }
 
     override fun getItemCount(): Int {

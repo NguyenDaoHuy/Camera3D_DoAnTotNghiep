@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layout_rename"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
         <ImageView
             android:layout_width="40dp"
             android:layout_height="36dp"
@@ -32,7 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:id="@+id/layout_delete"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <ImageView
             android:layout_width="40dp"
             android:layout_height="35dp"
@@ -52,7 +56,8 @@
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:id="@+id/layout_share"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
         <ImageView
             android:layout_width="40dp"
             android:layout_height="36dp"

@@ -65,7 +65,6 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
         dialogOK.setOnClickListener {
             mModel.clickDeleteImage(context!!,pictures!!.path)
             dialog!!.dismiss()
-            finishActivity()
         }
         dialogCancel.setOnClickListener {
             dialog!!.dismiss()

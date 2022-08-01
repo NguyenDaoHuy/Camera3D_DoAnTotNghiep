@@ -231,8 +231,7 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-       //     onClickShareNoImage(mModel.getFileImageList()[position].path)
-            showMessage("Maintenance !")
+           onClickShareNoImage(mModel.getFileImageList()[position].path)
         }
         dialog!!.show()
     }

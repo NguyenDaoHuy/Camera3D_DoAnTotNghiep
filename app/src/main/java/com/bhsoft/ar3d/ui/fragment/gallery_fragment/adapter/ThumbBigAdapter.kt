@@ -3,6 +3,7 @@ package com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.ItemImageThumbBigGalleryBinding
@@ -19,7 +20,7 @@ class ThumbBigAdapter(private val inters :IThumBig)
         fun getDataBig(position:Int):Pictures
         fun getContextBig():Context
         fun onClickItemThumBig(position: Int)
-        fun onLongClickChangeThumBigImage(position: Int)
+        fun onLongClickChangeThumBigImage(position: Int,imgThumbBig : ImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbBigViewHolder {
@@ -35,7 +36,7 @@ class ThumbBigAdapter(private val inters :IThumBig)
             inters.onClickItemThumBig(position)
         }
         holder.itemView.setOnLongClickListener {
-            inters.onLongClickChangeThumBigImage(position)
+            inters.onLongClickChangeThumBigImage(position,holder.binding.imgThumbBig)
             true
         }
     }

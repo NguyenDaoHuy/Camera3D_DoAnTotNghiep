@@ -1,21 +1,19 @@
 package com.bhsoft.ar3d.ui.fragment.gallery_fragment
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,13 +27,15 @@ import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragme
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
-import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel
 import java.io.File
+import java.io.FileOutputStream
+import java.lang.RuntimeException
 
 
 class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),GalleryCallBack,
     GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall{
     private var dialog : Dialog?=null
+    private var shareImage : Intent? = null
     override fun initComponents() {
         getBindingData().galleryViewModel = mModel
         mModel.uiEventLiveData.observe(this){
@@ -231,12 +231,13 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-            showMessage("Share")
+       //     onClickShareNoImage(mModel.getFileImageList()[position].path)
+            showMessage("Maintenance !")
         }
         dialog!!.show()
     }
     @SuppressLint("UseRequireInsteadOfGet")
-    override fun onLongClickChangeThumbSmallImage(position: Int) {
+    override fun onLongClickChangeThumbSmallImage(position: Int,imgThumbSmall : ImageView) {
         showDialog()
         val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
@@ -251,13 +252,13 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-            showMessage("Share")
+            onClickShareImage(mModel.getFileImageList()[position].path,imgThumbSmall)
         }
         dialog!!.show()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
-    override fun onLongClickChangeThumBigImage(position: Int) {
+    override fun onLongClickChangeThumBigImage(position: Int,imgThumbBig : ImageView) {
         showDialog()
         val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
@@ -272,7 +273,7 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-            showMessage("Share")
+            onClickShareImage(mModel.getFileImageList()[position].path,imgThumbBig)
         }
         dialog!!.show()
     }
@@ -301,5 +302,49 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
     override fun onResumeControl() {
         super.onResumeControl()
         mModel.getImages()
+    }
+
+    fun onClickShareImage(path : String,imgThumbSmall : ImageView){
+        val builder : StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+        val file = File(path)
+        val shareImage : Intent
+        try{
+            val fileOutputStream = FileOutputStream(file)
+            val uri : Uri = Uri.fromFile(file)
+            val drawable = imgThumbSmall.drawable as BitmapDrawable
+            val bitmap = drawable.bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            shareImage = Intent(Intent.ACTION_SEND)
+            shareImage.type = "image/*"
+            shareImage.putExtra(Intent.EXTRA_STREAM,uri)
+            shareImage.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }catch (e : Exception){
+            throw RuntimeException(e)
+        }
+        startActivity(Intent.createChooser(shareImage,"Share Image"))
+    }
+    fun onClickShareNoImage(path : String){
+        val builder : StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+        val file = File(path)
+        val shareImage : Intent
+        try{
+            val fileOutputStream = FileOutputStream(file)
+            val uri : Uri = Uri.fromFile(file)
+            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            shareImage = Intent(Intent.ACTION_SEND)
+            shareImage.setType("image/*")
+            shareImage.putExtra(Intent.EXTRA_STREAM,uri)
+            shareImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }catch (e : Exception){
+            throw RuntimeException(e)
+        }
+        startActivity(Intent.createChooser(shareImage,"Share Image"))
     }
 }

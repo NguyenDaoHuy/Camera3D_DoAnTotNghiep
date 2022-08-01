@@ -44,8 +44,8 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
                 GalleryViewModel.GET_DATA_IMAGE_SUCCESS -> getDataImageSuccess()
             }
         }
-        initRecyclerViewImage()
         initRecylerViewThumbBig()
+        initRecyclerViewImage()
         initRecylerViewThumbSmall()
         mModel.getImages()
         setHasOptionsMenu(true)

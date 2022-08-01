@@ -21,6 +21,10 @@
             app:titleTextColor="@color/white"
             android:background="#EF7C8E">
         </androidx.appcompat.widget.Toolbar>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recylerThumbnailBig"/>
        <androidx.recyclerview.widget.RecyclerView
            android:layout_width="match_parent"
            android:layout_height="match_parent"
@@ -29,9 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recylerThumbnailSmall"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recylerThumbnailBig"/>
+
     </LinearLayout>
 </layout>

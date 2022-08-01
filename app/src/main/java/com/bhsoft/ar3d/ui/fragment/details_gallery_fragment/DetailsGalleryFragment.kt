@@ -3,8 +3,10 @@ package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
@@ -38,11 +40,21 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
                 DetailsGalleryViewModel.ON_CLICK_DELETE -> onClickDeleteImage()
+                DetailsGalleryViewModel.ON_CLICK_DETECT -> onClickDetectImage()
             }
         }
         pictures = arguments!!.getSerializable("details") as Pictures?
         Glide.with(context!!).load(pictures!!.path).into(getBindingData().imgDetails)
         onClickToBack()
+    }
+
+    private fun onClickDetectImage() {
+        getBindingData().txtOutput.visibility = View.VISIBLE
+        mModel.imgInput = getBindingData().imgDetails
+        mModel.txtOutput = getBindingData().txtOutput
+        val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
+        val bitMap = drawable.bitmap
+        mModel.runClassfication(bitMap)
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

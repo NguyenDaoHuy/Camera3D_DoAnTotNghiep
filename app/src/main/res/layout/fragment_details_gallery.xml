@@ -24,16 +24,31 @@
                 android:tint="@color/black"
                 android:padding="10dp"/>
         </LinearLayout>
+
         <ImageView
             android:id="@+id/imgDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/linear"
+            android:layout_above="@id/txtOutput"
             android:layout_below="@id/ln_actionbar"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/txtOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/linear"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:minHeight="100dp"
+            android:text="Choose a photo using these buttons"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
         <LinearLayout
             android:layout_width="match_parent"
             android:id="@+id/linear"
@@ -47,6 +62,15 @@
                 android:layout_weight="1"
                 android:src="@drawable/icon_share"
                 android:id="@+id/imgShare"/>
+
+            <ImageView
+                android:id="@+id/imgDetect"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{()->detailsViewModel.clickDetectImage()}"
+                android:src="@drawable/icon_ar_object" />
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"

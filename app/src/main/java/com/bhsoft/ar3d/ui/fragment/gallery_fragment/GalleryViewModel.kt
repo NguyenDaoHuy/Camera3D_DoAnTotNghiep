@@ -113,25 +113,12 @@ class GalleryViewModel @Inject constructor(
         val dialogOK = dialog!!.findViewById<Button>(R.id.btn_ok)
         val dialogCancel = dialog!!.findViewById<Button>(R.id.btn_cancel)
         dialogOK.setOnClickListener {
-            val projection = arrayOf(MediaStore.Images.Media._ID)
-            val selection = MediaStore.Images.Media.DATA + "= ?"
-            val selectionArgs = arrayOf(File(paths).absolutePath)
-            val queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            val contentResolver = context.contentResolver
-            val cursor = contentResolver.query(queryUri,projection,selection,selectionArgs,null)
-            if (cursor!!.moveToFirst()){
-                val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
-                val deleteUri = ContentUris.withAppendedId(queryUri,id)
-                try {
-                    contentResolver.delete(deleteUri,null,null)
-                    Toast.makeText(context,"Delete successfully !!!", Toast.LENGTH_SHORT).show()
-                    //set lai data
-                    getImages()
-                }catch (e : Exception){
-                    e.printStackTrace()
-                    Toast.makeText(context,"Delete failed !!!", Toast.LENGTH_SHORT).show()
-                }
+            var file = File(paths)
+            if (file.isFile){
+                file.delete()
+                Toast.makeText(context,"Delete successfully !!!", Toast.LENGTH_SHORT).show()
             }
+            getImages()
             dialog!!.dismiss()
         }
         dialogCancel.setOnClickListener {

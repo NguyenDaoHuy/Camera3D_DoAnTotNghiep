@@ -231,8 +231,7 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-       //     onClickShareNoImage(mModel.getFileImageList()[position].path)
-            showMessage("Maintenance !")
+           onClickShareNoImage(mModel.getFileImageList()[position].path)
         }
         dialog!!.show()
     }
@@ -318,9 +317,9 @@ class GalleryFragment : BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gal
             fileOutputStream.flush()
             fileOutputStream.close()
             shareImage = Intent(Intent.ACTION_SEND)
-            shareImage.setType("image/*")
+            shareImage.type = "image/*"
             shareImage.putExtra(Intent.EXTRA_STREAM,uri)
-            shareImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            shareImage.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }catch (e : Exception){
             throw RuntimeException(e)
         }

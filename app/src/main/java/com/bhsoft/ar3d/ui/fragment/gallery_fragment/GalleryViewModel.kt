@@ -5,23 +5,25 @@ import android.app.Dialog
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.view.Gravity
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.local.AppDatabase
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import java.io.File
+import java.io.FileOutputStream
+import java.lang.RuntimeException
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -33,6 +35,7 @@ class GalleryViewModel @Inject constructor(
 
     companion object{
         const val GET_DATA_IMAGE_SUCCESS = 1
+        const val START_ACTIVITY_SHARE = 2
     }
     private var filesImageList : ArrayList<Pictures>? = ArrayList()
 

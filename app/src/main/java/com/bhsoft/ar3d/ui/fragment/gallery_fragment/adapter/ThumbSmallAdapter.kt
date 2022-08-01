@@ -1,13 +1,17 @@
 package com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter
 
 import android.content.Context
+import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.ItemImageThumbSmallGalleryBinding
 import com.bumptech.glide.Glide
 import java.text.DecimalFormat
+import java.text.Format
+import java.util.*
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -22,7 +26,7 @@ class ThumbSmallAdapter(private val inters : IThumbSmall)
         fun getDataSmall(position:Int):Pictures
         fun getContextSmall():Context
         fun onClickItem(position: Int)
-        fun onLongClickChangeThumbSmallImage(position: Int)
+        fun onLongClickChangeThumbSmallImage(position: Int,imgThumbSmall : ImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbSmallViewHolder {
@@ -33,13 +37,14 @@ class ThumbSmallAdapter(private val inters : IThumbSmall)
     override fun onBindViewHolder(holder: ThumbSmallViewHolder, position: Int) {
       val pics = inters.getDataSmall(position)
       holder.binding.txtNameFileThumbSmall.text = pics.title
-      holder.binding.txtLength.text = getSize(pics.sizes.toInt())
+//      holder.binding.txtLength.text = getSize(pics.sizes.toInt())
+      holder.binding.txtLength.text = Formatter.formatFileSize(holder.binding.txtLength.context,pics.sizes)
       Glide.with(inters.getContextSmall()).load(pics.path).into(holder.binding.imgThumbSmall)
         holder.itemView.setOnClickListener {
             inters.onClickItem(position)
         }
         holder.itemView.setOnLongClickListener {
-            inters.onLongClickChangeThumbSmallImage(position)
+            inters.onLongClickChangeThumbSmallImage(position,holder.binding.imgThumbSmall)
             true
         }
     }

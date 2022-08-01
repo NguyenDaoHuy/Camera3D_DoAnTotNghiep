@@ -2,9 +2,13 @@ package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.StrictMode
 import android.view.Gravity
 import android.view.View
 import android.view.Window
@@ -17,6 +21,8 @@ import com.bhsoft.ar3d.databinding.FragmentDetailsGalleryBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bumptech.glide.Glide
+import java.io.File
+import java.io.FileOutputStream
 
 class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGalleryViewModel>(),DetailsGalleryCallBack{
    private var pictures : Pictures ?=null
@@ -41,6 +47,8 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
                 DetailsGalleryViewModel.ON_CLICK_DELETE -> onClickDeleteImage()
                 DetailsGalleryViewModel.ON_CLICK_DETECT -> onClickDetectImage()
+                DetailsGalleryViewModel.ON_DELETE_SUCCESS -> backStack()
+                DetailsGalleryViewModel.ON_CLICK_SHARE -> onClickShareImage()
             }
         }
         pictures = arguments!!.getSerializable("details") as Pictures?
@@ -63,9 +71,8 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
        val dialogOK = dialog!!.findViewById<Button>(R.id.btn_ok)
         val dialogCancel = dialog!!.findViewById<Button>(R.id.btn_cancel)
         dialogOK.setOnClickListener {
-            mModel.clickDeleteImage(context!!,pictures!!.path)
+            mModel.clickDeleteImage(pictures!!.path)
             dialog!!.dismiss()
-            finishActivity()
         }
         dialogCancel.setOnClickListener {
             dialog!!.dismiss()
@@ -100,7 +107,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     @SuppressLint("UseRequireInsteadOfGet")
     private fun onClickToBack() {
         getBindingData().btnBack.setOnClickListener {
-            fragmentManager!!.popBackStack()
+            backStack()
         }
     }
     override fun getBindingData() = mBinding as FragmentDetailsGalleryBinding
@@ -110,5 +117,30 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     }
     companion object{
         const val TAG = "Details"
+    }
+    fun backStack(){
+        requireActivity().supportFragmentManager!!.popBackStack()
+    }
+    fun onClickShareImage(){
+        val builder : StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+        val file = File(pictures!!.path)
+        val shareImage : Intent
+        try{
+            val fileOutputStream = FileOutputStream(file)
+            val uri : Uri = Uri.fromFile(file)
+            val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
+            val bitmap = drawable.bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            shareImage = Intent(Intent.ACTION_SEND)
+            shareImage.setType("image/*")
+            shareImage.putExtra(Intent.EXTRA_STREAM,uri)
+            shareImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }catch (e : Exception){
+            throw RuntimeException(e)
+        }
+        startActivity(Intent.createChooser(shareImage,"Share Image"))
     }
 }

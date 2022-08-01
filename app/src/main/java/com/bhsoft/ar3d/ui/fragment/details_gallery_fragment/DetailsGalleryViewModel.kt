@@ -1,12 +1,8 @@
 package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 
-import android.content.ContentUris
-import android.content.Context
 import android.graphics.*
-import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bhsoft.ar3d.data.local.AppDatabase
 import com.bhsoft.ar3d.data.model.BoxLable
 import com.bhsoft.ar3d.data.remote.InteractCommon
@@ -33,8 +29,10 @@ class DetailsGalleryViewModel @Inject constructor(
     private var objectDetector : ObjectDetector?=null
     private var boxes : MutableList<BoxLable>?=null
      companion object{
-        const val ON_CLICK_DELETE = 1
+         const val ON_CLICK_DELETE = 1
          const val ON_CLICK_DETECT = 2
+         const val ON_DELETE_SUCCESS = 3
+         const val ON_CLICK_SHARE = 4
      }
     init {
         //Multiple object detection in static images
@@ -48,23 +46,11 @@ class DetailsGalleryViewModel @Inject constructor(
     fun onClickDelete(){
         uiEventLiveData.value = ON_CLICK_DELETE
     }
-    fun clickDeleteImage(context: Context,paths : String){
-        val projection = arrayOf(MediaStore.Images.Media._ID)
-        val selection = MediaStore.Images.Media.DATA + "= ?"
-        val selectionArgs = arrayOf(File(paths).absolutePath)
-        val queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val contentResolver = context.contentResolver
-        val cursor = contentResolver.query(queryUri,projection,selection,selectionArgs,null)
-        if (cursor!!.moveToFirst()){
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
-            val deleteUri = ContentUris.withAppendedId(queryUri,id)
-            try {
-                contentResolver.delete(deleteUri,null,null)
-                Toast.makeText(context,"Delete successfully !!!",Toast.LENGTH_SHORT).show()
-            }catch (e : Exception){
-                e.printStackTrace()
-                Toast.makeText(context,"Delete failed !!!",Toast.LENGTH_SHORT).show()
-            }
+    fun clickDeleteImage(paths : String){
+        val file = File(paths)
+        if(file.isFile){
+            file.delete()
+            uiEventLiveData.value = ON_DELETE_SUCCESS
         }
     }
 
@@ -125,5 +111,8 @@ class DetailsGalleryViewModel @Inject constructor(
         }.addOnFailureListener { e ->
             e.printStackTrace()
         }
+    }
+    fun onClickShare(){
+        uiEventLiveData.value = ON_CLICK_SHARE
     }
 }

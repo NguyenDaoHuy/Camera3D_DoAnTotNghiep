@@ -54,7 +54,7 @@ class ThumbSmallAdapter(private val inters : IThumbSmall)
         val d = size
         val long10 = (log10(d.toDouble()) / log10(1024.0))
         val stringBuilder = StringBuilder()
-        val decimalFormat = DecimalFormat("#,##0.#")
+        val decimalFormat = DecimalFormat("#,###.#")
         val power = 1024.0.pow(long10)
         stringBuilder.append(decimalFormat.format(d/power).toDouble())
         stringBuilder.append(" ")

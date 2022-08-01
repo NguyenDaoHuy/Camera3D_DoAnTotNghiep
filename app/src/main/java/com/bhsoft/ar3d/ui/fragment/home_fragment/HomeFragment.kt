@@ -35,7 +35,8 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
         }
     }
     private fun onCLickGallery(){
-        connectPermission()
+        goToGallery()
+//        connectPermission()
     }
 
     private fun goToGallery() {
@@ -74,7 +75,7 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
 
     private fun connectPermission() {
         if (checkPermission()) {
-            goToGallery()
+
         } else {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("App Permission")
@@ -123,8 +124,6 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
             if (Environment.isExternalStorageManager()) {
                 Log.d(TAG, "onActivityResult: Manage External Storage Permission is granted")
                 Toast.makeText(requireContext(), "Manage External Storage Permission is granted", Toast.LENGTH_SHORT).show()
-                //hàm
-                goToGallery()
             }
         } else {
             Log.d(TAG, "onActivityResult: Manage External Storage Permission is denied")
@@ -153,8 +152,7 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
             if (grantResults.isNotEmpty()) {
                 val write = grantResults[0] == PackageManager.PERMISSION_GRANTED
                 if (write) {
-                    // hàm
-                    goToGallery()
+
                     Log.d(TAG, "onRequestPermissionResult: External Storage permission granted")
                 } else {
                     Log.d(TAG, "onRequestPermissionResult: External Storage permission denied")

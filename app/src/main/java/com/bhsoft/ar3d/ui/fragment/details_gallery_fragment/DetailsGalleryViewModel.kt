@@ -8,12 +8,10 @@ import com.bhsoft.ar3d.data.model.BoxLable
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import java.io.File
-import java.lang.StringBuilder
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -92,15 +90,17 @@ class DetailsGalleryViewModel @Inject constructor(
             if (detectedObjects.isNotEmpty()){
                 val builder = StringBuilder()
                 boxes = ArrayList()
-                for (objects: DetectedObject in detectedObjects){
-                    if (objects.labels.isNotEmpty()){
-                        val lable = objects.labels[0].text
-                        builder.append(lable)
-                            .append(": ")
-                            .append(objects.labels[0].confidence).append("\n")
-                        boxes!!.add(BoxLable(objects.boundingBox,lable))
-                    }else{
-                        builder.append("Unknow").append("\n")
+                for (`object` in detectedObjects) {
+                    for (label in `object`.labels) {
+                        builder.append(label.text)
+                            .append(" : ")
+                            .append(label.confidence)
+                            .append("\n")
+                    }
+                    if (!`object`.labels.isEmpty()) {
+                        boxes!!.add(BoxLable(`object`.boundingBox,`object`.labels[0].text))
+                    } else {
+                        boxes!!.add(BoxLable(`object`.boundingBox,"Unknown"))
                     }
                 }
                 txtOutput.text = builder.toString()

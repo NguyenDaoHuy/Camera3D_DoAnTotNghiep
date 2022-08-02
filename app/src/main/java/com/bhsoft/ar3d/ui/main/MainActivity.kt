@@ -37,12 +37,12 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
 //        showDialog()
         connectPermission()
         CustomCameraPermission()
-        CustomWritePermission()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                dialog!!.dismiss()
-            }
-        }
+//        CustomWritePermission()
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if (Environment.isExternalStorageManager()) {
+//                dialog!!.dismiss()
+//            }
+//        }
     }
 
 //    @SuppressLint("UseRequireInsteadOfGet")
@@ -120,6 +120,7 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
     }
 
     override fun getBindingData() = mBinding as ActivityMainBinding
+
     private fun connectPermission() {
         if (checkPermission()) {
 

@@ -8,6 +8,10 @@ import com.bhsoft.ar3d.data.model.BoxLable
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabel
+import com.google.mlkit.vision.label.ImageLabeler
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
@@ -26,6 +30,7 @@ class DetailsGalleryViewModel @Inject constructor(
     lateinit var txtOutput : TextView
     private var objectDetector : ObjectDetector?=null
     private var boxes : MutableList<BoxLable>?=null
+    private var imageLabeler: ImageLabeler? = null
      companion object{
          const val ON_CLICK_DELETE = 1
          const val ON_CLICK_DETECT = 2
@@ -40,6 +45,11 @@ class DetailsGalleryViewModel @Inject constructor(
             .enableClassification()
             .build()
         objectDetector = ObjectDetection.getClient(options)
+
+        imageLabeler = ImageLabeling.getClient(ImageLabelerOptions.Builder()
+                .setConfidenceThreshold(0.7f)
+                .build()
+        )
     }
     fun onClickDelete(){
         uiEventLiveData.value = ON_CLICK_DELETE

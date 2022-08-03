@@ -1,6 +1,7 @@
 package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,6 +16,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentDetailsGalleryBinding
@@ -49,6 +51,9 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
                 DetailsGalleryViewModel.ON_CLICK_DETECT -> onClickDetectImage()
                 DetailsGalleryViewModel.ON_DELETE_SUCCESS -> backStack()
                 DetailsGalleryViewModel.ON_CLICK_SHARE -> onClickShareImage()
+                DetailsGalleryViewModel.ON_VISIBLE_BUTTON -> onVisibleButton()
+                DetailsGalleryViewModel.ON_TOAST_BOXES_NULL -> onToastBoxesNull()
+                DetailsGalleryViewModel.ON_CLICK_CROP_IMAGE -> onClickCropImage()
             }
         }
         pictures = arguments!!.getSerializable("details") as Pictures?
@@ -78,6 +83,12 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             dialog!!.dismiss()
         }
         dialog!!.show()
+    }
+    private fun onClickCropImage(){
+        val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
+        val bitMap = drawable.bitmap
+        mModel.cropImage(bitMap)
+        showDialogImageCroped()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -135,12 +146,35 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             fileOutputStream.flush()
             fileOutputStream.close()
             shareImage = Intent(Intent.ACTION_SEND)
-            shareImage.setType("image/*")
+            shareImage.type = "image/*"
             shareImage.putExtra(Intent.EXTRA_STREAM,uri)
-            shareImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            shareImage.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }catch (e : Exception){
             throw RuntimeException(e)
         }
         startActivity(Intent.createChooser(shareImage,"Share Image"))
+    }
+    fun onVisibleButton(){
+        getBindingData().btnCrop.visibility = View.VISIBLE
+    }
+    fun onToastBoxesNull(){
+        Toast.makeText(requireContext(),"No objects found",Toast.LENGTH_SHORT).show()
+    }
+    fun showDialogImageCroped(){
+        val view = View.inflate(context, R.layout.dialog_list_image_croped, null)
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
+        dialog.setCancelable(false)
+        val btnCancel  = view.findViewById<Button>(R.id.btnCancel)
+        val btnAddGallery  = view.findViewById<Button>(R.id.btnAddGallery)
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnAddGallery.setOnClickListener {
+
+        }
     }
 }

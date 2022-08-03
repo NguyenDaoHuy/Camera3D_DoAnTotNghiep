@@ -8,7 +8,6 @@ import com.bhsoft.ar3d.data.model.BoxLable
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.label.ImageLabel
 import com.google.mlkit.vision.label.ImageLabeler
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
@@ -31,11 +30,16 @@ class DetailsGalleryViewModel @Inject constructor(
     private var objectDetector : ObjectDetector?=null
     private var boxes : MutableList<BoxLable>?=null
     private var imageLabeler: ImageLabeler? = null
+    private var listBitmap:ArrayList<Bitmap>? = null
+
      companion object{
          const val ON_CLICK_DELETE = 1
          const val ON_CLICK_DETECT = 2
          const val ON_DELETE_SUCCESS = 3
          const val ON_CLICK_SHARE = 4
+         const val ON_VISIBLE_BUTTON = 5
+         const val ON_CLICK_CROP_IMAGE = 6
+         const val ON_TOAST_BOXES_NULL = 7
      }
     init {
         //Multiple object detection in static images
@@ -115,6 +119,7 @@ class DetailsGalleryViewModel @Inject constructor(
                 }
                 txtOutput.text = builder.toString()
                 drawDetectionResult(boxes!!,bitmap!!)
+                uiEventLiveData.value = ON_VISIBLE_BUTTON
             }else{
                 txtOutput.text = "Could not detected"
             }
@@ -124,5 +129,23 @@ class DetailsGalleryViewModel @Inject constructor(
     }
     fun onClickShare(){
         uiEventLiveData.value = ON_CLICK_SHARE
+    }
+    fun onClickCropImage(){
+        uiEventLiveData.value = ON_CLICK_CROP_IMAGE
+    }
+    fun cropImage(bitmap: Bitmap?){
+        if(boxes!!.size == 0){
+            uiEventLiveData.value = ON_TOAST_BOXES_NULL
+        }else{
+            listBitmap = ArrayList()
+            for(boxe in boxes!!){
+                val croppedBitmap = Bitmap.createBitmap(bitmap!!,
+                    boxe.rect.left,
+                    boxe.rect.top,
+                    boxe.rect.width(),
+                    boxe.rect.height(), null, false)
+                listBitmap!!.add(croppedBitmap)
+            }
+        }
     }
 }

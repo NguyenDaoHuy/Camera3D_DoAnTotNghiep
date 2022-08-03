@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#2034FF</color>
+    <color name="btn_crop">#E65050</color>
+    <color name="transparent">#4D000000</color>
 </resources>

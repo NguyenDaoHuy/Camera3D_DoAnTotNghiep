@@ -33,6 +33,8 @@ class DetailsGalleryViewModel @Inject constructor(
     private var labeler  :ImageLabeler?=null
     private var boxes : MutableList<BoxLable>?=null
     private var inputImage : InputImage?=null
+    private var listBitmap:ArrayList<Bitmap>? = null
+
      companion object{
          const val ON_CLICK_DELETE = 1
          const val ON_CLICK_DETECT = 2
@@ -40,6 +42,9 @@ class DetailsGalleryViewModel @Inject constructor(
          const val ON_CLICK_SHARE = 4
          const val PROGRESS_DIALOG = 5
          const val PROGRESS_DIALOG_DISSMISS = 6
+         const val ON_VISIBLE_BUTTON = 7
+         const val ON_CLICK_CROP_IMAGE = 8
+         const val ON_TOAST_BOXES_NULL = 9
      }
     init {
         //Multiple object detection in static images
@@ -141,6 +146,7 @@ class DetailsGalleryViewModel @Inject constructor(
                             boxes!!.add(BoxLable(bounds,"Unknown"))
                         }
                         if (i == detectedObjects.size){
+                            uiEventLiveData.value = ON_VISIBLE_BUTTON
                             txtOutput.text = builder.toString()
                             drawDetectionResult(boxes!!,bitmap!!)
                         }
@@ -155,5 +161,23 @@ class DetailsGalleryViewModel @Inject constructor(
     }
     fun onClickShare(){
         uiEventLiveData.value = ON_CLICK_SHARE
+    }
+    fun onClickCropImage(){
+        uiEventLiveData.value = ON_CLICK_CROP_IMAGE
+    }
+    fun cropImage(bitmap: Bitmap?){
+        if(boxes!!.size == 0){
+            uiEventLiveData.value = ON_TOAST_BOXES_NULL
+        }else{
+            listBitmap = ArrayList()
+            for(boxe in boxes!!){
+                val croppedBitmap = Bitmap.createBitmap(bitmap!!,
+                    boxe.rect.left,
+                    boxe.rect.top,
+                    boxe.rect.width(),
+                    boxe.rect.height(), null, false)
+                listBitmap!!.add(croppedBitmap)
+            }
+        }
     }
 }

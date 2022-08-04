@@ -3,6 +3,7 @@ package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -29,6 +30,7 @@ import java.io.FileOutputStream
 class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGalleryViewModel>(),DetailsGalleryCallBack{
    private var pictures : Pictures ?=null
     private var dialog : Dialog?=null
+    private var progressDialog : ProgressDialog?=null
     override fun error(id: String, error: Throwable) {
         showMessage(error.message!!)
     }
@@ -44,6 +46,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     @SuppressLint("UseRequireInsteadOfGet")
     override fun initComponents() {
         getBindingData().detailsViewModel = mModel
+        progressDialog = ProgressDialog(context)
         mModel.uiEventLiveData.observe(this){
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
@@ -51,14 +54,27 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
                 DetailsGalleryViewModel.ON_CLICK_DETECT -> onClickDetectImage()
                 DetailsGalleryViewModel.ON_DELETE_SUCCESS -> backStack()
                 DetailsGalleryViewModel.ON_CLICK_SHARE -> onClickShareImage()
+                DetailsGalleryViewModel.PROGRESS_DIALOG -> showProgressDialog()
+                DetailsGalleryViewModel.PROGRESS_DIALOG_DISSMISS -> onDismissDialog()
                 DetailsGalleryViewModel.ON_VISIBLE_BUTTON -> onVisibleButton()
                 DetailsGalleryViewModel.ON_TOAST_BOXES_NULL -> onToastBoxesNull()
                 DetailsGalleryViewModel.ON_CLICK_CROP_IMAGE -> onClickCropImage()
             }
         }
+
         pictures = arguments!!.getSerializable("details") as Pictures?
         Glide.with(context!!).load(pictures!!.path).into(getBindingData().imgDetails)
         onClickToBack()
+    }
+
+    private fun onDismissDialog() {
+        progressDialog!!.dismiss()
+    }
+
+    private fun showProgressDialog() {
+        progressDialog!!.setMessage("Please wait.......")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
     }
 
     private fun onClickDetectImage() {
@@ -83,12 +99,6 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             dialog!!.dismiss()
         }
         dialog!!.show()
-    }
-    private fun onClickCropImage(){
-        val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
-        val bitMap = drawable.bitmap
-        mModel.cropImage(bitMap)
-        showDialogImageCroped()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -146,13 +156,19 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             fileOutputStream.flush()
             fileOutputStream.close()
             shareImage = Intent(Intent.ACTION_SEND)
-            shareImage.type = "image/*"
+            shareImage.setType("image/*")
             shareImage.putExtra(Intent.EXTRA_STREAM,uri)
-            shareImage.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            shareImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }catch (e : Exception){
             throw RuntimeException(e)
         }
         startActivity(Intent.createChooser(shareImage,"Share Image"))
+    }
+    private fun onClickCropImage(){
+        val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
+        val bitMap = drawable.bitmap
+        mModel.cropImage(bitMap)
+        showDialogImageCroped()
     }
     fun onVisibleButton(){
         getBindingData().btnCrop.visibility = View.VISIBLE

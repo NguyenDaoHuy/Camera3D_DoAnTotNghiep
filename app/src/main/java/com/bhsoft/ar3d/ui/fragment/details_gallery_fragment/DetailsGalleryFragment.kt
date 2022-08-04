@@ -2,6 +2,7 @@ package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -27,6 +28,7 @@ import java.io.FileOutputStream
 class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGalleryViewModel>(),DetailsGalleryCallBack{
    private var pictures : Pictures ?=null
     private var dialog : Dialog?=null
+    private var progressDialog : ProgressDialog?=null
     override fun error(id: String, error: Throwable) {
         showMessage(error.message!!)
     }
@@ -42,6 +44,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     @SuppressLint("UseRequireInsteadOfGet")
     override fun initComponents() {
         getBindingData().detailsViewModel = mModel
+        progressDialog = ProgressDialog(context)
         mModel.uiEventLiveData.observe(this){
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
@@ -49,11 +52,24 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
                 DetailsGalleryViewModel.ON_CLICK_DETECT -> onClickDetectImage()
                 DetailsGalleryViewModel.ON_DELETE_SUCCESS -> backStack()
                 DetailsGalleryViewModel.ON_CLICK_SHARE -> onClickShareImage()
+                DetailsGalleryViewModel.PROGRESS_DIALOG -> showProgressDialog()
+                DetailsGalleryViewModel.PROGRESS_DIALOG_DISSMISS -> onDismissDialog()
             }
         }
+
         pictures = arguments!!.getSerializable("details") as Pictures?
         Glide.with(context!!).load(pictures!!.path).into(getBindingData().imgDetails)
         onClickToBack()
+    }
+
+    private fun onDismissDialog() {
+        progressDialog!!.dismiss()
+    }
+
+    private fun showProgressDialog() {
+        progressDialog!!.setMessage("Please wait.......")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
     }
 
     private fun onClickDetectImage() {

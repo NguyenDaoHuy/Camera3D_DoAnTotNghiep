@@ -10,7 +10,9 @@ import android.os.Environment
 import android.os.Environment.getExternalStorageDirectory
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.health.TimerStat
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -36,6 +38,8 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     private lateinit var outputDirectory: File
     private lateinit var cameraExcutor:ExecutorService
     private lateinit var vibrator:Vibrator
+    private var timer : Timer?=null
+    private var checkAuto = false
 
     @SuppressLint("UseRequireInsteadOfGet")
     override fun initComponents() {
@@ -47,11 +51,13 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                 CameraViewModel.ON_CLICK_AR_OBJECT -> goToArObject()
                 CameraViewModel.ON_CLICK_SHARE -> goToShare()
                 CameraViewModel.ON_CLICK_TAKE_PHOTO -> onClickTakePhoto()
+                CameraViewModel.ON_CLICK_AUTO_CAMERA -> onClickAutoCamera()
             }
         }
         checkPermissionGranted()
         cameraExcutor = Executors.newSingleThreadExecutor()
         vibrator = activity!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
     }
 
     //Hiệu ứng rung khi ấn nút chụp ảnh
@@ -117,7 +123,34 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
         onVibrator()
         takePhoto()
     }
-
+    //Click nut chup anh lien tuc
+    private  fun onClickAutoCamera() {
+        onVibrator()
+        getBindingData().imgStop.visibility = View.VISIBLE
+        getBindingData().imgCamera.visibility = View.GONE
+        getBindingData().txtX2.visibility = View.GONE
+        if (!checkAuto){
+            checkAuto = true
+            timer = Timer()
+            // A new thread with a 0,3-second delay before changing
+            timer!!.scheduleAtFixedRate(
+                object : TimerTask() {
+                    override fun run() {
+                        outputDirectory = getOutputDirectory()
+                        takePhoto()
+                    }
+                },0, 300)
+        }else{
+            if (timer!=null){
+                checkAuto = false
+                timer!!.cancel()
+                timer =null
+                getBindingData().imgStop.visibility = View.GONE
+                getBindingData().imgCamera.visibility = View.VISIBLE
+                getBindingData().txtX2.visibility = View.VISIBLE
+            }
+        }
+    }
     @SuppressLint("NewApi")
     private fun getOutputDirectory() : File{
         val mediaStorageDir = File(getExternalStorageDirectory().toString() +"/"
@@ -146,7 +179,6 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    initToast("Photo Saved $savedUri")
                 }
 
                 override fun onError(exception: ImageCaptureException) {

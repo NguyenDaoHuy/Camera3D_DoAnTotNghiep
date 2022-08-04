@@ -16,6 +16,8 @@ class CameraViewModel @Inject constructor(
         const val ON_CLICK_AR_OBJECT = 2
         const val ON_CLICK_SHARE = 3
         const val ON_CLICK_TAKE_PHOTO = 4
+        const val ON_CLICK_AUTO_CAMERA = 5
+
     }
     fun onCLickGallery(){
         uiEventLiveData.value = ON_CLICK_GALLERY
@@ -28,5 +30,8 @@ class CameraViewModel @Inject constructor(
     }
     fun onCLickTakePhoto(){
         uiEventLiveData.value = ON_CLICK_TAKE_PHOTO
+    }
+    fun onClickAutoCamera(){
+        uiEventLiveData.value = ON_CLICK_AUTO_CAMERA
     }
 }

@@ -1,13 +1,23 @@
 package com.bhsoft.ar3d.ui.fragment.details_gallery_fragment
 
 import android.graphics.*
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.core.content.ContextCompat
+import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.local.AppDatabase
 import com.bhsoft.ar3d.data.model.BoxLable
+import com.bhsoft.ar3d.data.model.Image
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeler
 import com.google.mlkit.vision.label.ImageLabeling
@@ -16,9 +26,12 @@ import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executor
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class DetailsGalleryViewModel @Inject constructor(
@@ -33,7 +46,8 @@ class DetailsGalleryViewModel @Inject constructor(
     private var labeler  :ImageLabeler?=null
     private var boxes : MutableList<BoxLable>?=null
     private var inputImage : InputImage?=null
-    private var listBitmap:ArrayList<Bitmap>? = null
+    private var listImageCroped:ArrayList<Image>? = null
+
 
      companion object{
          const val ON_CLICK_DELETE = 1
@@ -45,6 +59,7 @@ class DetailsGalleryViewModel @Inject constructor(
          const val ON_VISIBLE_BUTTON = 7
          const val ON_CLICK_CROP_IMAGE = 8
          const val ON_TOAST_BOXES_NULL = 9
+         const val ON_SAVE_IMAGE_SUCCESS = 10
      }
     init {
         //Multiple object detection in static images
@@ -108,6 +123,7 @@ class DetailsGalleryViewModel @Inject constructor(
     fun runClassfication(bitmap: Bitmap?) {
         uiEventLiveData.value = PROGRESS_DIALOG
         inputImage = InputImage.fromBitmap(bitmap,0)
+        listImageCroped = ArrayList()
         //detect
         objectDetector!!.process(inputImage).addOnSuccessListener { detectedObjects ->
             if (detectedObjects.isNotEmpty()){
@@ -126,24 +142,24 @@ class DetailsGalleryViewModel @Inject constructor(
                         if (imageLabels.count()>0){
                             val maxValue =
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    imageLabels.stream().max(Comparator.comparing { v -> v.confidence })
-                                        .get()
+                                    imageLabels.stream().max(Comparator.comparing { v -> v.confidence }).get()
                                 } else {
                                     imageLabels[0]
                                 }
                             for (labels in imageLabels){
-
                                 if (labels.confidence == maxValue.confidence){
                                     builder.append(labels.text)
                                         .append(" : ")
                                         .append(labels.confidence)
                                         .append("\n")
                                     boxes!!.add(BoxLable(bounds,labels.text))
+                                    listImageCroped!!.add(Image(labels.text,croppedBitmap))
                                 }
                             }
                         }
                         else {
                             boxes!!.add(BoxLable(bounds,"Unknown"))
+                            listImageCroped!!.add(Image("Unknown",croppedBitmap))
                         }
                         if (i == detectedObjects.size){
                             uiEventLiveData.value = ON_VISIBLE_BUTTON
@@ -154,6 +170,7 @@ class DetailsGalleryViewModel @Inject constructor(
                 }
             }else{
                 txtOutput.text = "Could not detected"
+                uiEventLiveData.value = PROGRESS_DIALOG_DISSMISS
             }
         }.addOnFailureListener { e ->
             e.printStackTrace()
@@ -165,19 +182,40 @@ class DetailsGalleryViewModel @Inject constructor(
     fun onClickCropImage(){
         uiEventLiveData.value = ON_CLICK_CROP_IMAGE
     }
-    fun cropImage(bitmap: Bitmap?){
-        if(boxes!!.size == 0){
-            uiEventLiveData.value = ON_TOAST_BOXES_NULL
-        }else{
-            listBitmap = ArrayList()
-            for(boxe in boxes!!){
-                val croppedBitmap = Bitmap.createBitmap(bitmap!!,
-                    boxe.rect.left,
-                    boxe.rect.top,
-                    boxe.rect.width(),
-                    boxe.rect.height(), null, false)
-                listBitmap!!.add(croppedBitmap)
-            }
+    fun getListImageCroped() : ArrayList<Image>{
+        return listImageCroped!!
+    }
+    fun saveImageCropedToGallery(){
+        for (image in listImageCroped!!){
+            savePhoto(image)
         }
+    }
+
+    private fun savePhoto(image: Image) {
+        val mediaStorageDir = File(
+            Environment.getExternalStorageDirectory().toString() +"/"
+                    + Environment.DIRECTORY_DCIM + "/ObjectDetected")
+        if (!mediaStorageDir.isDirectory){
+            mediaStorageDir.mkdirs()
+        }
+
+        var outputStream: FileOutputStream? = null
+        val outFile = File(mediaStorageDir, image.name +"_"+ SimpleDateFormat(
+            Constants.FILE_NAME_FORMAT,
+            Locale.getDefault())
+            .format(System.currentTimeMillis()) +".jpg")
+        try {
+            outputStream = FileOutputStream(outFile)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        image.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        try {
+            outputStream!!.flush()
+            outputStream!!.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        uiEventLiveData.value = ON_SAVE_IMAGE_SUCCESS
     }
 }

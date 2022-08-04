@@ -10,27 +10,40 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Environment
 import android.os.StrictMode
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.R
+import com.bhsoft.ar3d.data.model.Image
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentDetailsGalleryBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
 import com.bumptech.glide.Glide
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
-class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGalleryViewModel>(),DetailsGalleryCallBack{
-   private var pictures : Pictures ?=null
+class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGalleryViewModel>(),DetailsGalleryCallBack,ImageCropedAdapter.IImageCroped{
+    private var pictures : Pictures ?=null
     private var dialog : Dialog?=null
     private var progressDialog : ProgressDialog?=null
+
     override fun error(id: String, error: Throwable) {
         showMessage(error.message!!)
     }
@@ -59,6 +72,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
                 DetailsGalleryViewModel.ON_VISIBLE_BUTTON -> onVisibleButton()
                 DetailsGalleryViewModel.ON_TOAST_BOXES_NULL -> onToastBoxesNull()
                 DetailsGalleryViewModel.ON_CLICK_CROP_IMAGE -> onClickCropImage()
+                DetailsGalleryViewModel.ON_SAVE_IMAGE_SUCCESS -> onSaveImageSuccess()
             }
         }
 
@@ -167,7 +181,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     private fun onClickCropImage(){
         val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
         val bitMap = drawable.bitmap
-        mModel.cropImage(bitMap)
+       // mModel.cropImage(bitMap)
         showDialogImageCroped()
     }
     fun onVisibleButton(){
@@ -184,13 +198,60 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
         dialog.show()
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
         dialog.setCancelable(false)
+        if (Gravity.CENTER == Gravity.CENTER) {
+            dialog!!.setCancelable(true)
+        } else {
+            dialog!!.setCancelable(false)
+        }
         val btnCancel  = view.findViewById<Button>(R.id.btnCancel)
         val btnAddGallery  = view.findViewById<Button>(R.id.btnAddGallery)
+        val rcvImageCroped  = view.findViewById<RecyclerView>(R.id.rcvImageCroped)
+        initRecyclerViewDialog(rcvImageCroped)
         btnCancel.setOnClickListener {
             dialog.dismiss()
         }
         btnAddGallery.setOnClickListener {
-
+            mModel.saveImageCropedToGallery()
         }
+    }
+    fun initRecyclerViewDialog(recyclerView: RecyclerView){
+        val imageCropedAdapter = ImageCropedAdapter(this)
+        val layoutManager : RecyclerView.LayoutManager = GridLayoutManager(context,3, RecyclerView.VERTICAL,false)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = imageCropedAdapter
+    }
+
+    override fun getCount(): Int {
+       return mModel.getListImageCroped().size
+    }
+
+    override fun getImage(position: Int): Image {
+        return mModel.getListImageCroped().get(position)
+    }
+
+    override fun onClickItem(position: Int) {
+        val image = mModel.getListImageCroped().get(position)
+        val view = View.inflate(context, R.layout.dialog_image_crop_details, null)
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
+        dialog.setCancelable(false)
+        if (Gravity.CENTER == Gravity.CENTER) {
+            dialog!!.setCancelable(true)
+        } else {
+            dialog!!.setCancelable(false)
+        }
+        val imgImgaeCroped  = view.findViewById<ImageView>(R.id.imgImgaeCroped)
+        imgImgaeCroped.setImageBitmap(image.bitmap)
+    }
+    fun onSaveImageSuccess(){
+        Toast.makeText(context,"Success",Toast.LENGTH_SHORT).show()
+        val galleryFragment = GalleryFragment()
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.content,galleryFragment)
+        fragmentTransaction.addToBackStack(GalleryFragment.TAG)
+        fragmentTransaction.commit()
     }
 }

@@ -1,11 +1,7 @@
 package com.bhsoft.ar3d.data.model
 
+import android.graphics.Bitmap
 import java.io.Serializable
 
-data class Image(var id : String,
-                 var title : String,
-                 var displayName : String,
-                 var size : String,
-                 var duration : String?,
-                 var path : String,
-                 var dateAdded : String) : Serializable
+data class Image(var name: String,
+                 var bitmap : Bitmap) : Serializable

@@ -22,21 +22,62 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:background="@color/white" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/clickCamera"
+                    android:background="@drawable/custom_btn_take_photo"
+                    android:onClick="@{()-> cameraViewModel.onCLickTakePhoto()}">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_camera" />
+                </RelativeLayout>
 
-              <RelativeLayout
-                  android:layout_width="70dp"
-                  android:layout_height="70dp"
-                  android:layout_alignParentBottom="true"
-                  android:layout_centerHorizontal="true"
-                  android:layout_marginBottom="15dp"
-                  android:background="@drawable/custom_btn_take_photo"
-                  android:onClick="@{()-> cameraViewModel.onCLickTakePhoto()}">
-                  <ImageView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_centerInParent="true"
-                      android:src="@drawable/ic_camera" />
-              </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toEndOf="@id/clickCamera"
+                    android:background="@drawable/custom_btn_take_photo"
+                    android:onClick="@{()->cameraViewModel.onClickAutoCamera()}">
+
+                    <ImageView
+                        android:id="@+id/imgCamera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imgCamera"
+                        android:id="@+id/txtX2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="X2" />
+
+                    <ImageView
+                        android:id="@+id/imgStop"
+                        android:layout_centerInParent="true"
+                        android:layout_width="35dp"
+                        android:visibility="gone"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_stop" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
           </RelativeLayout>
           <LinearLayout
               android:layout_width="match_parent"
@@ -96,6 +137,7 @@
                   android:gravity="center_vertical"
                   android:background="?attr/selectableItemBackground"
                   android:onClick="@{() -> cameraViewModel.onCLickShare()}">
+
                   <ImageView
                       android:id="@+id/imgShare"
                       android:layout_width="match_parent"

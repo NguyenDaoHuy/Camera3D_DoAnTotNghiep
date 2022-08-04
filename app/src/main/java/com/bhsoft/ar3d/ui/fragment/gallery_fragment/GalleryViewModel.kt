@@ -2,15 +2,11 @@ package com.bhsoft.ar3d.ui.fragment.gallery_fragment
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.StrictMode
 import android.provider.MediaStore
 import android.view.Gravity
 import android.view.Window
@@ -22,8 +18,7 @@ import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import java.io.File
-import java.io.FileOutputStream
-import java.lang.RuntimeException
+import java.util.*
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -44,13 +39,19 @@ class GalleryViewModel @Inject constructor(
         val filePath = "/storage/emulated/0/DCIM/ar3d"
         val file = File(filePath)
         val files = file.listFiles()
+        //sap xep theo thoi gian chup
+        Arrays.sort(files
+        ) { p0, p1 -> p1!!.lastModified().compareTo(p0!!.lastModified()) }
+
         if (files!=null){
             for (file1 :File in files){
                 if (file1.path.endsWith(".png")||file1.path.endsWith(".jpg")){
                     filesImageList!!.add(Pictures(file1.path,file1.name,file1.length()))
                 }
             }
+
         }
+
         uiEventLiveData.value = GET_DATA_IMAGE_SUCCESS
     }
 
@@ -127,6 +128,6 @@ class GalleryViewModel @Inject constructor(
         dialog.show()
     }
     fun getFileImageList():List<Pictures>{
-        return filesImageList!!.reversed()!!
+        return filesImageList!!
     }
 }

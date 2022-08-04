@@ -14,12 +14,14 @@
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/dialog_change_image.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/dialog_confirm.xml" value="0.25" />
+        <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/dialog_image_crop_details.xml" value="0.24682971014492755" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/dialog_list_image_croped.xml" value="0.264" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_details_gallery.xml" value="0.176" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_gallery.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_home.xml" value="0.2" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/fragment_home2.xml" value="0.25" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/item_image_from_gallery.xml" value="0.25" />
+        <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/item_image_thumb_big_gallery.xml" value="0.3625" />
         <entry key="..\:/CongTy/BaseScan3DApp/app/src/main/res/layout/item_image_thumb_small_gallery.xml" value="0.25" />
         <entry key="..\:/Project/BaseMVVM/app/src/main/res/layout/activity_main.xml" value="0.17604166666666668" />
         <entry key="..\:/Project/BaseMVVM/app/src/main/res/layout/dialog_confirm.xml" value="0.2" />

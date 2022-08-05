@@ -51,13 +51,12 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                 CameraViewModel.ON_CLICK_AR_OBJECT -> goToArObject()
                 CameraViewModel.ON_CLICK_SHARE -> goToShare()
                 CameraViewModel.ON_CLICK_TAKE_PHOTO -> onClickTakePhoto()
-                CameraViewModel.ON_CLICK_AUTO_CAMERA -> onClickAutoCamera()
             }
         }
         checkPermissionGranted()
         cameraExcutor = Executors.newSingleThreadExecutor()
         vibrator = activity!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
+        onClickAutoCamera()
     }
 
     //Hiệu ứng rung khi ấn nút chụp ảnh
@@ -125,30 +124,32 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     }
     //Click nut chup anh lien tuc
     private  fun onClickAutoCamera() {
-        onVibrator()
-        getBindingData().imgStop.visibility = View.VISIBLE
-        getBindingData().imgCamera.visibility = View.GONE
-        getBindingData().txtX2.visibility = View.GONE
-        if (!checkAuto){
-            checkAuto = true
-            timer = Timer()
-            // A new thread with a 0,3-second delay before changing
-            timer!!.scheduleAtFixedRate(
-                object : TimerTask() {
-                    override fun run() {
-                        outputDirectory = getOutputDirectory()
-                        takePhoto()
-                    }
-                },0, 300)
-        }else{
-            if (timer!=null){
-                checkAuto = false
-                timer!!.cancel()
-                timer =null
-                getBindingData().imgStop.visibility = View.GONE
-                getBindingData().imgCamera.visibility = View.VISIBLE
-                getBindingData().txtX2.visibility = View.VISIBLE
+        getBindingData().clickCamera.setOnLongClickListener {
+            onVibrator()
+            getBindingData().imgStop.visibility = View.VISIBLE
+            getBindingData().imgCamera.visibility = View.GONE
+            if (!checkAuto){
+                checkAuto = true
+                timer = Timer()
+                // A new thread with a 0,3-second delay before changing
+                timer!!.scheduleAtFixedRate(
+                    object : TimerTask() {
+                        override fun run() {
+                            outputDirectory = getOutputDirectory()
+                            takePhoto()
+                        }
+                    },0, 300)
+            }else{
+                if (timer!=null){
+                    checkAuto = false
+                    timer!!.cancel()
+                    timer =null
+                    getBindingData().imgStop.visibility = View.GONE
+                    getBindingData().imgCamera.visibility = View.VISIBLE
+                    initToast("Diss Auto")
+                }
             }
+            true
         }
     }
     @SuppressLint("NewApi")

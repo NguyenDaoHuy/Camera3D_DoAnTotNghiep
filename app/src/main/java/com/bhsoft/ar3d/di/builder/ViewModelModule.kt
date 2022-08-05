@@ -7,6 +7,7 @@ import com.bhsoft.ar3d.di.model.ViewModelKey
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraViewModel
 import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.GalleryImageCropViewModel
 import com.bhsoft.ar3d.ui.fragment.home_fragment.HomeViewModel
 import com.bhsoft.ar3d.ui.main.MainViewModel
 import com.bhsoft.ar3d.ui.main.user.UserViewModel
@@ -50,6 +51,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DetailsGalleryViewModel::class)
     abstract fun bindsDetailsGalleryViewModel(detailsGalleryViewModel: DetailsGalleryViewModel):ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GalleryImageCropViewModel::class)
+    abstract fun bindsGalleryImageCropViewModel(galleryImageCropViewModel: GalleryImageCropViewModel):ViewModel
 
     @Binds
     abstract fun bindsViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory

@@ -34,6 +34,7 @@ import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.GalleryImageCropFragment
 import com.bumptech.glide.Glide
 import java.io.File
 import java.io.FileOutputStream
@@ -43,6 +44,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     private var pictures : Pictures ?=null
     private var dialog : Dialog?=null
     private var progressDialog : ProgressDialog?=null
+    private var dialogImageCroper : AlertDialog?=null
 
     override fun error(id: String, error: Throwable) {
         showMessage(error.message!!)
@@ -194,21 +196,21 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
         val view = View.inflate(context, R.layout.dialog_list_image_croped, null)
         val builder = AlertDialog.Builder(context)
         builder.setView(view)
-        val dialog = builder.create()
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
-        dialog.setCancelable(false)
+        dialogImageCroper = builder.create()
+        dialogImageCroper!!.show()
+        dialogImageCroper!!.window?.setBackgroundDrawableResource(R.color.transparent)
+        dialogImageCroper!!.setCancelable(false)
         if (Gravity.CENTER == Gravity.CENTER) {
-            dialog!!.setCancelable(true)
+            dialogImageCroper!!.setCancelable(true)
         } else {
-            dialog!!.setCancelable(false)
+            dialogImageCroper!!.setCancelable(false)
         }
         val btnCancel  = view.findViewById<Button>(R.id.btnCancel)
         val btnAddGallery  = view.findViewById<Button>(R.id.btnAddGallery)
         val rcvImageCroped  = view.findViewById<RecyclerView>(R.id.rcvImageCroped)
         initRecyclerViewDialog(rcvImageCroped)
         btnCancel.setOnClickListener {
-            dialog.dismiss()
+            dialogImageCroper!!.dismiss()
         }
         btnAddGallery.setOnClickListener {
             mModel.saveImageCropedToGallery()
@@ -244,14 +246,19 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
             dialog!!.setCancelable(false)
         }
         val imgImgaeCroped  = view.findViewById<ImageView>(R.id.imgImgaeCroped)
+        val btnCanCelDialogImageCrop  = view.findViewById<ImageView>(R.id.btnCanCelDialogImageCrop)
         imgImgaeCroped.setImageBitmap(image.bitmap)
+        btnCanCelDialogImageCrop.setOnClickListener {
+            dialog.dismiss()
+        }
     }
     fun onSaveImageSuccess(){
         Toast.makeText(context,"Success",Toast.LENGTH_SHORT).show()
-        val galleryFragment = GalleryFragment()
+        dialogImageCroper!!.dismiss()
+        val galleryImageCropFragment = GalleryImageCropFragment()
         val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.content,galleryFragment)
-        fragmentTransaction.addToBackStack(GalleryFragment.TAG)
+        fragmentTransaction.replace(R.id.content,galleryImageCropFragment)
+        fragmentTransaction.addToBackStack(GalleryImageCropFragment.TAG)
         fragmentTransaction.commit()
     }
 }

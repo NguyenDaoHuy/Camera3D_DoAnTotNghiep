@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="galleryImageCropViewModel"
-            type="com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop.GalleryImageCropViewModel"/>
+            name="folderImageViewModel"
+            type="com.bhsoft.ar3d.ui.fragment.gallery_image_crop.folder.FolderImageViewModel"/>
     </data>
 
     <LinearLayout
@@ -16,24 +16,28 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:title="Gallery Object"
+            app:title="Folder Object"
             android:id="@+id/toolBarGallery"
             app:titleTextColor="@color/white"
             android:background="#9B7CEF">
         </androidx.appcompat.widget.Toolbar>
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_search_view"
+            android:textSize="20dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search ..." />
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recylerThumbnailBig"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recylerFileName"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recylerThumbnailSmall"/>
-
+            android:id="@+id/rcvFolderImageCrop"/>
     </LinearLayout>
 </layout>

@@ -1,4 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.gallery_image_crop
+package com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.model.Pictures
-import com.bhsoft.ar3d.databinding.FragmentGalleryBinding
 import com.bhsoft.ar3d.databinding.FragmentGalleryImageCropBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
@@ -37,9 +36,11 @@ import java.io.FileOutputStream
 import java.lang.RuntimeException
 
 
-class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, GalleryImageCropViewModel>(),GalleryImageCropCallBack,
+class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, GalleryImageCropViewModel>(),
+    GalleryImageCropCallBack,
     GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall{
     private var dialog : Dialog?=null
+    private var folder : Pictures ?=null
 
     override fun initComponents() {
         getBindingData().galleryImageCropViewModel = mModel
@@ -49,28 +50,13 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
                 GalleryViewModel.GET_DATA_IMAGE_SUCCESS -> getDataImageSuccess()
             }
         }
+        folder = requireArguments().getSerializable("folder") as Pictures?
         initRecylerViewThumbBig()
         initRecyclerViewImage()
         initRecylerViewThumbSmall()
-        mModel.getImages("")
+        mModel.getImages("",folder!!.title)
         setHasOptionsMenu(true)
         customToolbar()
-        onSearch()
-    }
-
-    private fun onSearch(){
-        getBindingData().searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onQueryTextChange(newText: String): Boolean {
-                mModel.getImages(newText)
-                getDataImageSuccess()
-                return false
-            }
-        })
     }
 
     private fun getDataImageSuccess() {
@@ -261,11 +247,11 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
         dialogRename.setOnClickListener {
-            mModel.onRenameFile(context!!,position)
+            mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
         }
         dialogDelete.setOnClickListener {
-            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path,folder!!.title)
             dialog!!.dismiss()
         }
         dialogShare.setOnClickListener {
@@ -281,11 +267,11 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
         dialogRename.setOnClickListener {
-            mModel.onRenameFile(context!!,position)
+            mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
         }
         dialogDelete.setOnClickListener {
-            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path,folder!!.title)
             dialog!!.dismiss()
         }
         dialogShare.setOnClickListener {
@@ -302,11 +288,11 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
         dialogRename.setOnClickListener {
-            mModel.onRenameFile(context!!,position)
+            mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
         }
         dialogDelete.setOnClickListener {
-            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path)
+            mModel.getDeleteImage(context!!,mModel.getFileImageList()[position].path,folder!!.title)
             dialog!!.dismiss()
         }
         dialogShare.setOnClickListener {
@@ -339,7 +325,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
 
     override fun onResumeControl() {
         super.onResumeControl()
-        mModel.getImages("")
+        mModel.getImages("",folder!!.title)
     }
 
     fun onClickShareImage(path : String,imgThumbSmall : ImageView){

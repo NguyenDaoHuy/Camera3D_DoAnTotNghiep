@@ -194,7 +194,7 @@ class DetailsGalleryViewModel @Inject constructor(
     private fun savePhoto(image: Image) {
         val mediaStorageDir = File(
             Environment.getExternalStorageDirectory().toString() +"/"
-                    + Environment.DIRECTORY_DCIM + "/ObjectDetected")
+                    + Environment.DIRECTORY_DCIM + "/ObjectDetected" + "/${image.name}/")
         if (!mediaStorageDir.isDirectory){
             mediaStorageDir.mkdirs()
         }

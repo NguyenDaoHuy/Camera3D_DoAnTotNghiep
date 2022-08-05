@@ -10,9 +10,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Environment
 import android.os.StrictMode
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
@@ -21,9 +19,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.R
@@ -32,9 +27,8 @@ import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentDetailsGalleryBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
-import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
-import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
-import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.GalleryImageCropFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.folder.FolderImageFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop.GalleryImageCropFragment
 import com.bumptech.glide.Glide
 import java.io.File
 import java.io.FileOutputStream
@@ -255,10 +249,10 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     fun onSaveImageSuccess(){
         Toast.makeText(context,"Success",Toast.LENGTH_SHORT).show()
         dialogImageCroper!!.dismiss()
-        val galleryImageCropFragment = GalleryImageCropFragment()
+        val folderImageFragment = FolderImageFragment()
         val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.content,galleryImageCropFragment)
-        fragmentTransaction.addToBackStack(GalleryImageCropFragment.TAG)
+        fragmentTransaction.replace(R.id.content,folderImageFragment)
+        fragmentTransaction.addToBackStack(FolderImageFragment.TAG)
         fragmentTransaction.commit()
     }
 }

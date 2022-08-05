@@ -1,4 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.gallery_image_crop
+package com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -33,26 +33,26 @@ class GalleryImageCropViewModel @Inject constructor(
     }
     private var filesImageList : ArrayList<Pictures>? = ArrayList()
 
-    fun getImages(text: String){
+    fun getImages(text: String,folder:String){
         filesImageList!!.clear()
-        val filePath = "/storage/emulated/0/DCIM/ObjectDetected"
-        val file = File(filePath)
+        val filePath = "/storage/emulated/0/DCIM/ObjectDetected/"
+        val file = File(filePath + folder)
         val files = file.listFiles()
         //sap xep theo thoi gian chup
-        Arrays.sort(files
-        ) { p0, p1 -> p1!!.lastModified().compareTo(p0!!.lastModified()) }
-
         if (files!=null){
+            Arrays.sort(files) { p0, p1 -> p1!!.lastModified().compareTo(p0!!.lastModified()) }
             for (file1 :File in files){
                 if (file1.path.endsWith(".png")||file1.path.endsWith(".jpg")){
                     filesImageList!!.add(Pictures(file1.path,file1.name,file1.length()))
                 }
             }
+        }else{
+
         }
         uiEventLiveData.value = GET_DATA_IMAGE_SUCCESS
     }
 
-    fun onRenameFile(context: Context,position:Int){
+    fun onRenameFile(context: Context,position:Int,folder:String){
         val alterDialog = AlertDialog.Builder(context)
         alterDialog.setTitle("Rename to")
         val editText = EditText(context)
@@ -78,7 +78,7 @@ class GalleryImageCropViewModel @Inject constructor(
                 val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                 intent.data = Uri.fromFile(newFile)
                 context!!.sendBroadcast(intent)
-                getImages("")
+                getImages("",folder)
             }
 
         }
@@ -88,7 +88,7 @@ class GalleryImageCropViewModel @Inject constructor(
         alterDialog.show()
     }
 
-    fun getDeleteImage(context: Context,paths : String){
+    fun getDeleteImage(context: Context,paths : String,folder:String){
         val dialog = Dialog(context!!)
         dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog!!.setContentView(R.layout.dialog_confirm)
@@ -116,7 +116,7 @@ class GalleryImageCropViewModel @Inject constructor(
                 file.delete()
                 Toast.makeText(context,"Delete successfully !!!", Toast.LENGTH_SHORT).show()
             }
-            getImages("")
+            getImages("",folder)
             dialog!!.dismiss()
         }
         dialogCancel.setOnClickListener {

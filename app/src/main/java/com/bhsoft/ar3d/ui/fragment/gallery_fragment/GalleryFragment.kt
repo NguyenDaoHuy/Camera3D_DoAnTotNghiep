@@ -28,7 +28,8 @@ import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragme
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
-import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.GalleryImageCropFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.folder.FolderImageFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop.GalleryImageCropFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.RuntimeException
@@ -131,10 +132,10 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
     }
 
     private fun changeToGallery(){
-        val galleryImageCropFragment = GalleryImageCropFragment()
+        val folderImageFragment = FolderImageFragment()
         val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.content,galleryImageCropFragment)
-        fragmentTransaction.addToBackStack(GalleryImageCropFragment.TAG)
+        fragmentTransaction.replace(R.id.content,folderImageFragment)
+        fragmentTransaction.addToBackStack(FolderImageFragment.TAG)
         fragmentTransaction.commit()
     }
 

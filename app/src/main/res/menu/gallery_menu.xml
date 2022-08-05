@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/listViewThumbnailBig"
         android:title="Displayed with big thumbail" />
     <item android:id="@+id/listViewNameFile"
         android:title="Displayed with filename" />
     <item android:id="@+id/listViewThumbnailSmall"
         android:title="Displayed with small thumbnail" />
+    <item android:id="@+id/goToCamera"
+        android:title="Camera"
+        android:icon="@drawable/ic_camera_24"
+        app:showAsAction="always"/>
+    <item android:id="@+id/changeGallery"
+          android:title="Gallery"
+          android:icon="@drawable/ic_image_24"
+          app:showAsAction="always"/>
 
 </menu>

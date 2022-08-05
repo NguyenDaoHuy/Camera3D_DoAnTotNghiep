@@ -1,4 +1,4 @@
-package com.bhsoft.ar3d.ui.fragment.gallery_fragment
+package com.bhsoft.ar3d.ui.fragment.gallery_image_crop
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -15,31 +15,34 @@ import android.provider.MediaStore
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentGalleryBinding
+import com.bhsoft.ar3d.databinding.FragmentGalleryImageCropBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
 import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
-import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.GalleryImageCropFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.RuntimeException
 
 
-class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),GalleryCallBack,
+class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, GalleryImageCropViewModel>(),GalleryImageCropCallBack,
     GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall{
     private var dialog : Dialog?=null
-    private var shareImage : Intent? = null
+
     override fun initComponents() {
-        getBindingData().galleryViewModel = mModel
+        getBindingData().galleryImageCropViewModel = mModel
         mModel.uiEventLiveData.observe(this){
             when(it){
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
@@ -49,9 +52,25 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
         initRecylerViewThumbBig()
         initRecyclerViewImage()
         initRecylerViewThumbSmall()
-        mModel.getImages()
+        mModel.getImages("")
         setHasOptionsMenu(true)
         customToolbar()
+        onSearch()
+    }
+
+    private fun onSearch(){
+        getBindingData().searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onQueryTextChange(newText: String): Boolean {
+                mModel.getImages(newText)
+                getDataImageSuccess()
+                return false
+            }
+        })
     }
 
     private fun getDataImageSuccess() {
@@ -70,17 +89,17 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
     }
 
     override fun getLayoutMain(): Int {
-        return R.layout.fragment_gallery
+        return R.layout.fragment_gallery_image_crop
     }
 
     override fun setEvents() {
 
     }
 
-    override fun getBindingData() = mBinding as FragmentGalleryBinding
+    override fun getBindingData() = mBinding as FragmentGalleryImageCropBinding
 
-    override fun getViewModel(): Class<GalleryViewModel> {
-        return GalleryViewModel::class.java
+    override fun getViewModel(): Class<GalleryImageCropViewModel> {
+        return GalleryImageCropViewModel::class.java
     }
 
     override fun error(id: String, error: Throwable) {
@@ -106,7 +125,7 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
         getBindingData().recylerThumbnailBig.adapter = thumbBigAdapter
     }
     companion object{
-        val TAG = GalleryFragment::class.java.name
+        val TAG = GalleryImageCropFragment::class.java.name
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -129,15 +148,13 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
         }
         return true
     }
-
     private fun changeToGallery(){
-        val galleryImageCropFragment = GalleryImageCropFragment()
+        val galleryFragment = GalleryFragment()
         val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.content,galleryImageCropFragment)
-        fragmentTransaction.addToBackStack(GalleryImageCropFragment.TAG)
+        fragmentTransaction.replace(R.id.content,galleryFragment)
+        fragmentTransaction.addToBackStack(GalleryFragment.TAG)
         fragmentTransaction.commit()
     }
-
     private fun goCamera(){
         val cameraFragment = CameraFragment()
         val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -170,7 +187,7 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
     }
 
     override fun getData(position: Int): Pictures {
-       return mModel.getFileImageList()[position]
+        return mModel.getFileImageList()[position]
     }
 
 
@@ -253,7 +270,7 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
         }
         dialogShare.setOnClickListener {
             dialog!!.dismiss()
-           onClickShareNoImage(mModel.getFileImageList()[position].path)
+            onClickShareNoImage(mModel.getFileImageList()[position].path)
         }
         dialog!!.show()
     }
@@ -322,7 +339,7 @@ class GalleryFragment: BaseMvvmFragment<GalleryCallBack,GalleryViewModel>(),Gall
 
     override fun onResumeControl() {
         super.onResumeControl()
-        mModel.getImages()
+        mModel.getImages("")
     }
 
     fun onClickShareImage(path : String,imgThumbSmall : ImageView){

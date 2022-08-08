@@ -26,6 +26,7 @@ import com.bhsoft.ar3d.databinding.FragmentHomeBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
+import org.tensorflow.lite.task.vision.detector.Detection
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -118,6 +119,16 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
 
     // Click nút chụp ảnh
     private fun onClickTakePhoto(){
+        if(checkAuto){
+            if (timer!=null){
+                checkAuto = false
+                timer!!.cancel()
+                timer =null
+                getBindingData().imgStop.visibility = View.GONE
+                getBindingData().imgCamera.visibility = View.VISIBLE
+                initToast("Diss Auto")
+            }
+        }
         outputDirectory = getOutputDirectory()
         onVibrator()
         takePhoto()
@@ -139,16 +150,17 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                             takePhoto()
                         }
                     },0, 300)
-            }else{
-                if (timer!=null){
-                    checkAuto = false
-                    timer!!.cancel()
-                    timer =null
-                    getBindingData().imgStop.visibility = View.GONE
-                    getBindingData().imgCamera.visibility = View.VISIBLE
-                    initToast("Diss Auto")
-                }
             }
+//            else{
+//                if (timer!=null){
+//                    checkAuto = false
+//                    timer!!.cancel()
+//                    timer =null
+//                    getBindingData().imgStop.visibility = View.GONE
+//                    getBindingData().imgCamera.visibility = View.VISIBLE
+//                    initToast("Diss Auto")
+//                }
+//            }
             true
         }
     }
@@ -195,7 +207,8 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     }
 
     private fun goToArObject() {
-        initToast("ArObject")
+        getBindingData().clickCamera.visibility = View.GONE
+        
     }
 
     private fun goToGallery() {

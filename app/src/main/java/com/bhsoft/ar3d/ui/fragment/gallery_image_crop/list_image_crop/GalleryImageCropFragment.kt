@@ -1,7 +1,9 @@
 package com.bhsoft.ar3d.ui.fragment.gallery_image_crop.list_image_crop
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,7 +17,6 @@ import android.provider.MediaStore
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,16 +32,26 @@ import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabeler
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.RuntimeException
-
+import java.util.ArrayList
 
 class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, GalleryImageCropViewModel>(),
     GalleryImageCropCallBack,
-    GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall{
+    GalleryAdapter.IImageGallery ,ThumbBigAdapter.IThumBig,ThumbSmallAdapter.IThumbSmall,
+    ImageSearchAdapter.IImageSearch {
     private var dialog : Dialog?=null
     private var folder : Pictures ?=null
+    private var compareImageList : ArrayList<Pictures>? = ArrayList()
+    private var labeler  : ImageLabeler?=null
+    private var inputImage : InputImage?=null
+    private var dialogImageCroper : AlertDialog?=null
+    private var progressDialog : ProgressDialog?=null
 
     override fun initComponents() {
         getBindingData().galleryImageCropViewModel = mModel
@@ -50,6 +61,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
                 GalleryViewModel.GET_DATA_IMAGE_SUCCESS -> getDataImageSuccess()
             }
         }
+        progressDialog = ProgressDialog(context)
         folder = requireArguments().getSerializable("folder") as Pictures?
         initRecylerViewThumbBig()
         initRecyclerViewImage()
@@ -57,6 +69,11 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         mModel.getImages("",folder!!.title)
         setHasOptionsMenu(true)
         customToolbar()
+
+        val option = ImageLabelerOptions.Builder()
+            .setConfidenceThreshold(0.7f)
+            .build()
+        labeler = ImageLabeling.getClient(option)
     }
 
     private fun getDataImageSuccess() {
@@ -72,6 +89,12 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         getBindingData()!!.toolBarGallery.setNavigationOnClickListener { v ->
             fragmentManager!!.popBackStack()
         }
+    }
+
+    private fun showProgressDialog() {
+        progressDialog!!.setMessage("Please wait.......")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
     }
 
     override fun getLayoutMain(): Int {
@@ -246,6 +269,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        val dialogSearch = dialog!!.findViewById<LinearLayout>(R.id.layout_search)
         dialogRename.setOnClickListener {
             mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
@@ -258,6 +282,10 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
             dialog!!.dismiss()
             onClickShareNoImage(mModel.getFileImageList()[position].path)
         }
+        dialogSearch.setOnClickListener {
+            dialog!!.dismiss()
+            searchImageCroped(mModel.getFileImageList()[position])
+        }
         dialog!!.show()
     }
     @SuppressLint("UseRequireInsteadOfGet")
@@ -266,6 +294,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        val dialogSearch = dialog!!.findViewById<LinearLayout>(R.id.layout_search)
         dialogRename.setOnClickListener {
             mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
@@ -278,6 +307,10 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
             dialog!!.dismiss()
             onClickShareImage(mModel.getFileImageList()[position].path,imgThumbSmall)
         }
+        dialogSearch.setOnClickListener {
+            dialog!!.dismiss()
+            searchImageCroped(mModel.getFileImageList()[position])
+        }
         dialog!!.show()
     }
 
@@ -287,6 +320,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val dialogRename = dialog!!.findViewById<LinearLayout>(R.id.layout_rename)
         val dialogDelete = dialog!!.findViewById<LinearLayout>(R.id.layout_delete)
         val dialogShare = dialog!!.findViewById<LinearLayout>(R.id.layout_share)
+        val dialogSearch = dialog!!.findViewById<LinearLayout>(R.id.layout_search)
         dialogRename.setOnClickListener {
             mModel.onRenameFile(context!!,position,folder!!.title)
             dialog!!.dismiss()
@@ -299,6 +333,10 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
             dialog!!.dismiss()
             onClickShareImage(mModel.getFileImageList()[position].path,imgThumbBig)
         }
+        dialogSearch.setOnClickListener {
+            dialog!!.dismiss()
+            searchImageCroped(mModel.getFileImageList()[position])
+        }
         dialog!!.show()
     }
 
@@ -306,7 +344,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
     private fun showDialog() {
         dialog = Dialog(context!!)
         dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog!!.setContentView(R.layout.dialog_change_image)
+        dialog!!.setContentView(R.layout.dialog_change_image_2)
         val window = dialog!!.window ?: return
         window.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -371,4 +409,100 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         }
         startActivity(Intent.createChooser(shareImage,"Share Image"))
     }
+    fun searchImageCroped(pictures: Pictures){
+        showProgressDialog()
+        val index = pictures.title.indexOf("_")
+        val subString = pictures.title.substring(0, index)
+        showDialogImageSearch(subString)
+        Toast.makeText(context,subString,Toast.LENGTH_SHORT).show()
+    }
+
+    fun getCompareImages(imageName: String) {
+        compareImageList!!.clear()
+        val filePath = "/storage/emulated/0/DCIM/ar3d"
+        val file = File(filePath)
+        val files = file.listFiles()
+        if (files != null) {
+            for (file1: File in files) {
+                println(files.size)
+                if (file1.path.endsWith(".png") || file1.path.endsWith(".jpg")) {
+                    // get Bitmap of Image
+                    val file = File(file1.path)
+                    val uri: Uri = Uri.fromFile(file)
+                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri)
+
+                    inputImage = InputImage.fromBitmap(bitmap, 0)
+                    labeler!!.process(inputImage).addOnSuccessListener { imageLabels ->
+                        if (imageLabels.count() > 0) {
+                            println("=======================================>" + imageLabels.count())
+                            for (labels in imageLabels) {
+                                if (labels.text == imageName) { compareImageList!!.add(Pictures(file1.path, file1.name, file1.length()))
+                                    return@addOnSuccessListener
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fun showDialogImageSearch(imageName : String){
+        getCompareImages(imageName)
+        val view = View.inflate(context, R.layout.dialog_list_image_search, null)
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+        dialogImageCroper = builder.create()
+        dialogImageCroper!!.show()
+        dialogImageCroper!!.window?.setBackgroundDrawableResource(R.color.transparent)
+        dialogImageCroper!!.setCancelable(false)
+        if (Gravity.CENTER == Gravity.CENTER) {
+            dialogImageCroper!!.setCancelable(true)
+        } else {
+            dialogImageCroper!!.setCancelable(false)
+        }
+        val btnCancel  = view.findViewById<Button>(R.id.btnCancel)
+        val rcvImageSearch  = view.findViewById<RecyclerView>(R.id.rcvImageCroped)
+        val txtImageListSize = view.findViewById<TextView>(R.id.txtImageListSize)
+        initRecyclerViewDialog(rcvImageSearch)
+        if(compareImageList!!.size > 0){
+            txtImageListSize.setText("There were "+compareImageList!!.size+" results found")
+        }else if(compareImageList!!.size == 0){
+            txtImageListSize.setText("Not found ... ")
+        }
+        btnCancel.setOnClickListener {
+            dialogImageCroper!!.dismiss()
+        }
+    }
+
+    override fun getCount(): Int {
+        return compareImageList!!.size
+    }
+
+    override fun getImage(position: Int): Pictures {
+        return compareImageList!!.get(position)
+    }
+
+    override fun getContextImageSearch(): Context {
+        return requireContext()
+    }
+
+    override fun onClickImageSearch(position: Int) {
+        val detailsFragment = DetailsGalleryFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("details", compareImageList!!.get(position))
+        detailsFragment.arguments = bundle
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction!!.replace(R.id.content, detailsFragment!!)
+        transaction!!.addToBackStack(DetailsGalleryFragment.TAG)
+        transaction!!.commit()
+        dialogImageCroper!!.dismiss()
+    }
+
+    fun initRecyclerViewDialog(recyclerView: RecyclerView){
+        val imageSearchAdapter= ImageSearchAdapter(this)
+        val layoutManager : RecyclerView.LayoutManager = GridLayoutManager(context,3, RecyclerView.VERTICAL,false)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = imageSearchAdapter
+    }
+
 }

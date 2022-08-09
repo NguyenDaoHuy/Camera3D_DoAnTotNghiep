@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.provider.MediaStore
@@ -21,25 +22,33 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bhsoft.ar3d.R
+import com.bhsoft.ar3d.data.model.BoxLable
+import com.bhsoft.ar3d.data.model.Image
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.databinding.FragmentGalleryImageCropBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
 import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragment
+import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.GalleryAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbBigAdapter
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.adapter.ThumbSmallAdapter
+import com.bumptech.glide.Glide
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeler
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.ObjectDetector
+import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.RuntimeException
 import java.util.ArrayList
+import java.util.Comparator
 
 class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, GalleryImageCropViewModel>(),
     GalleryImageCropCallBack,
@@ -47,11 +56,13 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
     ImageSearchAdapter.IImageSearch {
     private var dialog : Dialog?=null
     private var folder : Pictures ?=null
-    private var compareImageList : ArrayList<Pictures>? = ArrayList()
+    private var compareImageList : ArrayList<Pictures>? = null
     private var labeler  : ImageLabeler?=null
-    private var inputImage : InputImage?=null
+ //   private var inputImage : InputImage?=null
     private var dialogImageCroper : AlertDialog?=null
     private var progressDialog : ProgressDialog?=null
+    private var objectDetector : ObjectDetector?=null
+    private var strImageSearch : String = ""
 
     override fun initComponents() {
         getBindingData().galleryImageCropViewModel = mModel
@@ -69,6 +80,13 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         mModel.getImages("",folder!!.title)
         setHasOptionsMenu(true)
         customToolbar()
+
+        val options = ObjectDetectorOptions.Builder()
+            .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
+            .enableMultipleObjects()
+            .enableClassification()
+            .build()
+        objectDetector = ObjectDetection.getClient(options)
 
         val option = ImageLabelerOptions.Builder()
             .setConfidenceThreshold(0.7f)
@@ -92,7 +110,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
     }
 
     private fun showProgressDialog() {
-        progressDialog!!.setMessage("Please wait.......")
+        progressDialog!!.setMessage("Searching .......")
         progressDialog!!.setCanceledOnTouchOutside(false)
         progressDialog!!.show()
     }
@@ -409,16 +427,18 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         }
         startActivity(Intent.createChooser(shareImage,"Share Image"))
     }
+
     fun searchImageCroped(pictures: Pictures){
         showProgressDialog()
+        compareImageList = ArrayList()
         val index = pictures.title.indexOf("_")
         val subString = pictures.title.substring(0, index)
-        showDialogImageSearch(subString)
+        getCompareImages2(subString,0)
         Toast.makeText(context,subString,Toast.LENGTH_SHORT).show()
     }
 
     fun getCompareImages(imageName: String) {
-        compareImageList!!.clear()
+        compareImageList = ArrayList()
         val filePath = "/storage/emulated/0/DCIM/ar3d"
         val file = File(filePath)
         val files = file.listFiles()
@@ -430,24 +450,83 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
                     val file = File(file1.path)
                     val uri: Uri = Uri.fromFile(file)
                     val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri)
+                    val inputImage = InputImage.fromBitmap(bitmap, 0)
 
-                    inputImage = InputImage.fromBitmap(bitmap, 0)
-                    labeler!!.process(inputImage).addOnSuccessListener { imageLabels ->
-                        if (imageLabels.count() > 0) {
-                            println("=======================================>" + imageLabels.count())
-                            for (labels in imageLabels) {
-                                if (labels.text == imageName) { compareImageList!!.add(Pictures(file1.path, file1.name, file1.length()))
-                                    return@addOnSuccessListener
+                    objectDetector!!.process(inputImage).addOnSuccessListener { detectedObjects ->
+                        if (detectedObjects.isNotEmpty()){
+                            var i = 0
+                            for (`object` in detectedObjects) {
+                                val bounds = `object`.boundingBox
+                                val croppedBitmap = Bitmap.createBitmap(bitmap!!,bounds.left,bounds.top,bounds.width(),bounds.height())
+                                var inputImage2 = InputImage.fromBitmap(croppedBitmap,0)
+                                labeler!!.process(inputImage2).addOnSuccessListener { imageLabels ->
+                                    i++
+                                    println("=======================================>" + imageLabels.count())
+                                    if (imageLabels.count()>0){
+                                        for (labels in imageLabels){
+                                            println("=============================================== 1 --->" + labels.text)
+                                            println("=============================================== 2 --->" + imageName)
+                                            if (labels.text == imageName){
+//                                                compareImageList!!.add(Pictures(file1.path, file1.name, file1.length()))
+//                                                println("=============================================== 3 --->" + compareImageList!!.size)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }.addOnFailureListener { e ->
+                        e.printStackTrace()
                     }
                 }
             }
         }
     }
-    fun showDialogImageSearch(imageName : String){
-        getCompareImages(imageName)
+
+    fun getCompareImages2(imageName: String,possition : Int){
+        val filePath = "/storage/emulated/0/DCIM/ar3d"
+        val file = File(filePath)
+        val files = file.listFiles()
+        if (files != null) {
+          val file1: File = files.get(possition)
+            if (file1.path.endsWith(".png") || file1.path.endsWith(".jpg")) {
+                val file = File(file1.path)
+                val uri: Uri = Uri.fromFile(file)
+                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri)
+                val inputImage = InputImage.fromBitmap(bitmap, 0)
+                var possition1 = possition + 1
+                println("=============================================== Ảnh thứ " + possition1)
+                objectDetector!!.process(inputImage).addOnSuccessListener { detectedObjects ->
+                    if (detectedObjects.isNotEmpty()){
+                        for (`object` in detectedObjects) {
+                            val bounds = `object`.boundingBox
+                            val croppedBitmap = Bitmap.createBitmap(bitmap!!,bounds.left,bounds.top,bounds.width(),bounds.height())
+                            var inputImage2 = InputImage.fromBitmap(croppedBitmap,0)
+                              labeler!!.process(inputImage2).addOnSuccessListener { imageLabels ->
+                                  println("=======================================>" + imageLabels.count())
+                                  for (labels in imageLabels){
+                                      println("=============================================== 1 --->" + labels.text)
+                                      println("=============================================== 2 --->" + imageName)
+                                        if (labels.text == imageName){
+                                            compareImageList!!.add(Pictures(file1.path, file1.name, file1.length()))
+                                            println("=============================================== Searchs Size  --->" + compareImageList!!.size)
+                                        }
+                                  }
+                             }
+                        }
+                    }
+                    if(possition1 == files.size){
+                        showDialogImageSearch()
+                        progressDialog!!.dismiss()
+                    }else{
+                        getCompareImages2(imageName, possition1)
+                    }
+                }
+            }
+        }
+    }
+
+    fun showDialogImageSearch(){
         val view = View.inflate(context, R.layout.dialog_list_image_search, null)
         val builder = AlertDialog.Builder(context)
         builder.setView(view)
@@ -464,11 +543,12 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         val rcvImageSearch  = view.findViewById<RecyclerView>(R.id.rcvImageCroped)
         val txtImageListSize = view.findViewById<TextView>(R.id.txtImageListSize)
         initRecyclerViewDialog(rcvImageSearch)
-        if(compareImageList!!.size > 0){
-            txtImageListSize.setText("There were "+compareImageList!!.size+" results found")
-        }else if(compareImageList!!.size == 0){
-            txtImageListSize.setText("Not found ... ")
+        if (compareImageList!!.isEmpty()) {
+            strImageSearch = "Not found ..."
+        } else {
+            strImageSearch = "There were " + compareImageList!!.size + " results found"
         }
+        txtImageListSize.setText(strImageSearch)
         btnCancel.setOnClickListener {
             dialogImageCroper!!.dismiss()
         }
@@ -487,6 +567,28 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
     }
 
     override fun onClickImageSearch(position: Int) {
+        val image = compareImageList!!.get(position)
+        val view = View.inflate(context, R.layout.dialog_image_crop_details, null)
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
+        dialog.setCancelable(false)
+        if (Gravity.CENTER == Gravity.CENTER) {
+            dialog!!.setCancelable(true)
+        } else {
+            dialog!!.setCancelable(false)
+        }
+        val imgImgaeCroped  = view.findViewById<ImageView>(R.id.imgImgaeCroped)
+        val btnCanCelDialogImageCrop  = view.findViewById<ImageView>(R.id.btnCanCelDialogImageCrop)
+        Glide.with(requireContext()).load(image.path).into(imgImgaeCroped)
+        btnCanCelDialogImageCrop.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+    override fun onLongClickImageSearch(position: Int) {
         val detailsFragment = DetailsGalleryFragment()
         val bundle = Bundle()
         bundle.putSerializable("details", compareImageList!!.get(position))
@@ -500,7 +602,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
 
     fun initRecyclerViewDialog(recyclerView: RecyclerView){
         val imageSearchAdapter= ImageSearchAdapter(this)
-        val layoutManager : RecyclerView.LayoutManager = GridLayoutManager(context,3, RecyclerView.VERTICAL,false)
+        val layoutManager : RecyclerView.LayoutManager = GridLayoutManager(context,1, RecyclerView.VERTICAL,false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = imageSearchAdapter
     }

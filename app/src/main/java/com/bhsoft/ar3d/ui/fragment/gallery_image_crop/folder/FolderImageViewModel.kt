@@ -24,13 +24,14 @@ class FolderImageViewModel @Inject constructor(
         val files = file.listFiles()
         if (files!=null){
             for (file1 : File in files){
-               if(file1.name.toLowerCase().contains(text)){
+               if(file1.name.toLowerCase().contains(text.toLowerCase())){
                    folderImageList!!.add(Pictures(file1.path,file1.name,file1.length()))
                }
             }
         }
     }
     fun getFileImageList():List<Pictures>{
+        Collections.sort(folderImageList);
         return folderImageList!!
     }
 }

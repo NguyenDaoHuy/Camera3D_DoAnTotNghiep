@@ -21,7 +21,6 @@
         android:id="@+id/txtImageListSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="There were 10 results found"
         android:layout_gravity="center"
         android:textColor="#635F5F"
         android:paddingTop="10dp"

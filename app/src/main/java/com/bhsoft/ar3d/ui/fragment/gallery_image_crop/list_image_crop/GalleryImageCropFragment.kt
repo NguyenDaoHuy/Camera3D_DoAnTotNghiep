@@ -89,7 +89,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         objectDetector = ObjectDetection.getClient(options)
 
         val option = ImageLabelerOptions.Builder()
-            .setConfidenceThreshold(0.7f)
+            .setConfidenceThreshold(0.6f)
             .build()
         labeler = ImageLabeling.getClient(option)
     }

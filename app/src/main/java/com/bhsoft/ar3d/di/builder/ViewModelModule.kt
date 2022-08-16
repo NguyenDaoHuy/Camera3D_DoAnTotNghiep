@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bhsoft.ar3d.di.model.ViewModelFactory
 import com.bhsoft.ar3d.di.model.ViewModelKey
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraViewModel
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.detect_camera.CameraDetectViewModel
 import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.folder.FolderImageViewModel
@@ -62,6 +63,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FolderImageViewModel::class)
     abstract fun bindsFolderImageViewModel(folderImageViewModel: FolderImageViewModel):ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CameraDetectViewModel::class)
+    abstract fun bindsCameraDetectViewModel(cameraDetectViewModel: CameraDetectViewModel):ViewModel
 
     @Binds
     abstract fun bindsViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory

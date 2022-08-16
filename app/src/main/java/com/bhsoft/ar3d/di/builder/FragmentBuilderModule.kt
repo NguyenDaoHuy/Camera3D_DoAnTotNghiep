@@ -1,6 +1,7 @@
 package com.bhsoft.ar3d.di.builder
 
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.detect_camera.CameraDetectFragment
 import com.bhsoft.ar3d.ui.fragment.details_gallery_fragment.DetailsGalleryFragment
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
 import com.bhsoft.ar3d.ui.fragment.gallery_image_crop.folder.FolderImageFragment
@@ -37,4 +38,7 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeFolderImageFragment(): FolderImageFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeCameraDetectFragment(): CameraDetectFragment
 }

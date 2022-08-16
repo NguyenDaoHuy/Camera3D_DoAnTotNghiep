@@ -88,13 +88,13 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
 //      hideSnackbar()
 //    }
 
-    view.useCloudMlSwitch.setOnCheckedChangeListener { _, isChecked ->
-      currentAnalyzer = if (isChecked) gcpAnalyzer else mlKitAnalyzer
-    }
+//    view.useCloudMlSwitch.setOnCheckedChangeListener { _, isChecked ->
+//      currentAnalyzer = if (isChecked) gcpAnalyzer else mlKitAnalyzer
+//    }
 
     val gcpConfigured = gcpAnalyzer.credentials != null
-    view.useCloudMlSwitch.isChecked = gcpConfigured
-    view.useCloudMlSwitch.isEnabled = gcpConfigured
+//    view.useCloudMlSwitch.isChecked = gcpConfigured
+//    view.useCloudMlSwitch.isEnabled = gcpConfigured
     currentAnalyzer = if (gcpConfigured) gcpAnalyzer else mlKitAnalyzer
 
     if (!gcpConfigured) {

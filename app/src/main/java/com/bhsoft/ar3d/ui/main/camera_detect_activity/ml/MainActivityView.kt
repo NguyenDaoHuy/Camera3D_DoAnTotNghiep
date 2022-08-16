@@ -19,7 +19,7 @@ class MainActivityView(val activity: Camera_Detect_Activity, renderer: AppRender
   val surfaceView = root.findViewById<GLSurfaceView>(R.id.surfaceview).apply {
     SampleRender(this, renderer, activity.assets)
   }
-  val useCloudMlSwitch = root.findViewById<SwitchCompat>(R.id.useCloudMlSwitch)
+// val useCloudMlSwitch = root.findViewById<SwitchCompat>(R.id.useCloudMlSwitch)
 //  val scanButton = root.findViewById<TextView>(R.id.scanButton)
 //  val resetButton = root.findViewById<TextView>(R.id.clearButton)
   val snackbarHelper = SnackbarHelper().apply {

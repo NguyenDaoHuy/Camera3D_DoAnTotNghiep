@@ -136,6 +136,16 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
 
     // Click nút chụp ảnh
     private fun onClickTakePhoto(){
+        if(checkAuto){
+            if (timer!=null){
+                checkAuto = false
+                timer!!.cancel()
+                timer =null
+                getBindingData().imgStop.visibility = View.GONE
+                getBindingData().imgCamera.visibility = View.VISIBLE
+                initToast("Diss Auto")
+            }
+        }
         outputDirectory = getOutputDirectory()
         onVibrator()
         takePhoto()
@@ -157,15 +167,6 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                             takePhoto()
                         }
                     },0, 300)
-            }else{
-                if (timer!=null){
-                    checkAuto = false
-                    timer!!.cancel()
-                    timer =null
-                    getBindingData().imgStop.visibility = View.GONE
-                    getBindingData().imgCamera.visibility = View.VISIBLE
-                    initToast("Diss Auto")
-                }
             }
             true
         }
@@ -212,6 +213,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
         initToast("Share")
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     private fun goToArObject() {
         initToast("ArObject")
         activity!!.startActivity(Intent(requireContext(), Camera_Detect_Activity::class.java))

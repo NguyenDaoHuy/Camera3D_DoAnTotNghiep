@@ -39,6 +39,7 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     private var dialog : Dialog?=null
     private var progressDialog : ProgressDialog?=null
     private var dialogImageCroper : AlertDialog?=null
+    private var checkDetected = false
 
     override fun error(id: String, error: Throwable) {
         showMessage(error.message!!)
@@ -88,12 +89,18 @@ class DetailsGalleryFragment:BaseMvvmFragment<DetailsGalleryCallBack,DetailsGall
     }
 
     private fun onClickDetectImage() {
-        getBindingData().txtOutput.visibility = View.VISIBLE
-        mModel.imgInput = getBindingData().imgDetails
-        mModel.txtOutput = getBindingData().txtOutput
-        val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
-        val bitMap = drawable.bitmap
-        mModel.runClassfication(bitMap)
+        if(!checkDetected){
+            checkDetected = true
+            getBindingData().txtOutput.visibility = View.VISIBLE
+            mModel.imgInput = getBindingData().imgDetails
+            mModel.txtOutput = getBindingData().txtOutput
+            val drawable = getBindingData().imgDetails.drawable as BitmapDrawable
+            val bitMap = drawable.bitmap
+            mModel.runClassfication(bitMap)
+        }
+        else{
+            Toast.makeText(context,"Finished",Toast.LENGTH_SHORT).show()
+        }
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

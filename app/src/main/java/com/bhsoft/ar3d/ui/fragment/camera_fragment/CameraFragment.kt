@@ -3,21 +3,19 @@ package com.bhsoft.ar3d.ui.fragment.camera_fragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Build.MODEL
 import android.os.Environment
 import android.os.Environment.getExternalStorageDirectory
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.health.TimerStat
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,7 +24,11 @@ import com.bhsoft.ar3d.databinding.FragmentHomeBinding
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryFragment
-import org.tensorflow.lite.task.vision.detector.Detection
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.Camera_Detect_Activity
+import com.google.mlkit.common.model.LocalModel
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.ObjectDetector
+import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,6 +43,7 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     private lateinit var vibrator:Vibrator
     private var timer : Timer?=null
     private var checkAuto = false
+    private var objectDetector : ObjectDetector?=null
 
     @SuppressLint("UseRequireInsteadOfGet")
     override fun initComponents() {
@@ -58,6 +61,20 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
         cameraExcutor = Executors.newSingleThreadExecutor()
         vibrator = activity!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         onClickAutoCamera()
+
+        val localModel = LocalModel.Builder()
+            .setAssetFilePath(MODEL)
+            .build()
+        val customObjectDetectorOptions =
+            CustomObjectDetectorOptions.Builder(localModel)
+                .setDetectorMode(CustomObjectDetectorOptions.STREAM_MODE)
+                .enableMultipleObjects()
+                .enableClassification()
+                .setClassificationConfidenceThreshold(0.5f)
+                .setMaxPerObjectLabelCount(10)
+                .build()
+
+        objectDetector = ObjectDetection.getClient(customObjectDetectorOptions)
     }
 
     //Hiệu ứng rung khi ấn nút chụp ảnh
@@ -119,16 +136,6 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
 
     // Click nút chụp ảnh
     private fun onClickTakePhoto(){
-        if(checkAuto){
-            if (timer!=null){
-                checkAuto = false
-                timer!!.cancel()
-                timer =null
-                getBindingData().imgStop.visibility = View.GONE
-                getBindingData().imgCamera.visibility = View.VISIBLE
-                initToast("Diss Auto")
-            }
-        }
         outputDirectory = getOutputDirectory()
         onVibrator()
         takePhoto()
@@ -150,17 +157,16 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                             takePhoto()
                         }
                     },0, 300)
+            }else{
+                if (timer!=null){
+                    checkAuto = false
+                    timer!!.cancel()
+                    timer =null
+                    getBindingData().imgStop.visibility = View.GONE
+                    getBindingData().imgCamera.visibility = View.VISIBLE
+                    initToast("Diss Auto")
+                }
             }
-//            else{
-//                if (timer!=null){
-//                    checkAuto = false
-//                    timer!!.cancel()
-//                    timer =null
-//                    getBindingData().imgStop.visibility = View.GONE
-//                    getBindingData().imgCamera.visibility = View.VISIBLE
-//                    initToast("Diss Auto")
-//                }
-//            }
             true
         }
     }
@@ -207,8 +213,8 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
     }
 
     private fun goToArObject() {
-        getBindingData().clickCamera.visibility = View.GONE
-        
+        initToast("ArObject")
+        activity!!.startActivity(Intent(requireContext(), Camera_Detect_Activity::class.java))
     }
 
     private fun goToGallery() {

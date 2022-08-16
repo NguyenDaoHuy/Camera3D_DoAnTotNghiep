@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -17,7 +18,9 @@ import com.bhsoft.ar3d.data.local.AppDatabase
 import com.bhsoft.ar3d.data.model.Pictures
 import com.bhsoft.ar3d.data.remote.InteractCommon
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
+import com.bhsoft.ar3d.ui.fragment.gallery_fragment.GalleryViewModel
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 import java.util.concurrent.Executor
 import javax.inject.Inject
@@ -32,6 +35,7 @@ class GalleryImageCropViewModel @Inject constructor(
         const val GET_DATA_IMAGE_SUCCESS = 1
     }
     private var filesImageList : ArrayList<Pictures>? = ArrayList()
+
 
     fun getImages(text: String,folder:String){
         filesImageList!!.clear()

@@ -1,67 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.opengl.GLSurfaceView
-        android:id="@+id/surfaceview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginBottom="80dp"-->
-<!--        android:layout_gravity="bottom|center_horizontal"-->
-<!--        app:layout_dodgeInsetEdges="bottom">-->
+        <android.opengl.GLSurfaceView
+            android:id="@+id/surfaceview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/scanButtonCard"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            app:cardBackgroundColor="#423A97C9"-->
-<!--            app:cardCornerRadius="20dp"-->
-<!--            android:paddingHorizontal="60dp"-->
-<!--            android:text="Scan" >-->
-<!--            <TextView-->
-<!--                android:id="@+id/scanButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:text="Scan"-->
-<!--                android:textColor="@color/white"/>-->
-<!--        </androidx.cardview.widget.CardView>-->
+        <RelativeLayout
+            android:id="@+id/btnAddObjectFromGallery"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="35dp"
+            android:background="@drawable/custom_backgr_button_add_3d_object">
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/clearButtonCard"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            app:cardCornerRadius="20dp"-->
-<!--            app:cardBackgroundColor="#423A97C9"-->
-<!--            android:paddingHorizontal="60dp">-->
-<!--            <TextView-->
-<!--                android:id="@+id/clearButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:text="Clear"-->
-<!--                android:textColor="@color/white"/>-->
-<!--        </androidx.cardview.widget.CardView>-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_add_white" />
+        </RelativeLayout>
 
-<!--    </LinearLayout>-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvObject3d"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_above="@+id/btnAddObjectFromGallery"
+            android:layout_margin="10dp" />
 
-<!--    <androidx.appcompat.widget.SwitchCompat-->
-<!--        android:id="@+id/useCloudMlSwitch"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="top|end"-->
-<!--        android:padding="16dp"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:background="#423A97C9"-->
-<!--        android:text="Use Cloud Ml" />-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/scanButtonCard"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="50dp"
+            android:layout_toStartOf="@+id/btnAddObjectFromGallery"
+            android:paddingHorizontal="60dp"
+            android:text="Scan"
+            app:cardBackgroundColor="#423A97C9"
+            app:cardCornerRadius="20dp">
 
+            <TextView
+                android:id="@+id/scanButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Scan"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/clearButtonCard"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:paddingHorizontal="60dp"
+            app:cardBackgroundColor="#423A97C9"
+            app:cardCornerRadius="20dp"
+            android:layout_toEndOf="@+id/btnAddObjectFromGallery"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="50dp">
+            <TextView
+                android:id="@+id/clearButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Clear"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

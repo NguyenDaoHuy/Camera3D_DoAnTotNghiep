@@ -1,8 +1,8 @@
-
 package com.bhsoft.ar3d.ui.main.camera_detect_activity.ml
 
 import android.opengl.GLSurfaceView
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -14,40 +14,43 @@ import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.samplerender.Sample
 /**
  * Wraps [R.layout.activity_main] and controls lifecycle operations for [GLSurfaceView].
  */
-class MainActivityView(val activity: Camera_Detect_Activity, renderer: AppRenderer) : DefaultLifecycleObserver {
-  val root = View.inflate(activity, R.layout.activity_camera_detect, null)
-  val surfaceView = root.findViewById<GLSurfaceView>(R.id.surfaceview).apply {
-    SampleRender(this, renderer, activity.assets)
-  }
-// val useCloudMlSwitch = root.findViewById<SwitchCompat>(R.id.useCloudMlSwitch)
-//  val scanButton = root.findViewById<TextView>(R.id.scanButton)
-//  val resetButton = root.findViewById<TextView>(R.id.clearButton)
-  val snackbarHelper = SnackbarHelper().apply {
-    setParentView(root.findViewById(R.id.coordinatorLayout))
-    setMaxLines(6)
-  }
+class MainActivityView(val activity: Camera_Detect_Activity, renderer: AppRenderer) :
+    DefaultLifecycleObserver {
+    val root = View.inflate(activity, R.layout.activity_camera_detect, null)
+    val surfaceView = root.findViewById<GLSurfaceView>(R.id.surfaceview).apply {
+        SampleRender(this, renderer, activity.assets)
+    }
 
-  override fun onResume(owner: LifecycleOwner) {
-    surfaceView.onResume()
-  }
+    // val useCloudMlSwitch = root.findViewById<SwitchCompat>(R.id.useCloudMlSwitch)
+    val scanButton = root.findViewById<TextView>(R.id.scanButton)
+    val resetButton = root.findViewById<TextView>(R.id.clearButton)
+    val btnAddObjectFromGallery = root.findViewById<RelativeLayout>(R.id.btnAddObjectFromGallery)
+    val snackbarHelper = SnackbarHelper().apply {
+        setParentView(root.findViewById(R.id.coordinatorLayout))
+        setMaxLines(6)
+    }
 
-  override fun onPause(owner: LifecycleOwner) {
-    surfaceView.onPause()
-  }
+    override fun onResume(owner: LifecycleOwner) {
+        surfaceView.onResume()
+    }
 
-  fun post(action: Runnable) = root.post(action)
+    override fun onPause(owner: LifecycleOwner) {
+        surfaceView.onPause()
+    }
 
-  /**
-   * Toggles the scan button depending on if scanning is in progress.
-   */
-  fun setScanningActive(active: Boolean) = when(active) {
-    true -> {
+    fun post(action: Runnable) = root.post(action)
+
+    /**
+     * Toggles the scan button depending on if scanning is in progress.
+     */
+    fun setScanningActive(active: Boolean) = when (active) {
+        true -> {
 //      scanButton.isEnabled = false
 //      scanButton.setText("Scanning")
-    }
-    false -> {
+        }
+        false -> {
 //      scanButton.isEnabled = true
 //      scanButton.setText("Scanning")
+        }
     }
-  }
 }

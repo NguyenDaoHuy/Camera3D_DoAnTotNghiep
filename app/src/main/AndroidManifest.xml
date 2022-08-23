@@ -6,7 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera.ar" />
+
+    <uses-feature
+        android:name="android.hardware.camera.ar"
+        android:required="true" />
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -21,7 +24,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="com.bhsoft.ar3d.common.MVVMApplication"
+        android:name=".common.MVVMApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_ar3d"
         android:label="AR 3D"
@@ -29,10 +32,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaseMVVM">
         <activity
-            android:name="com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.Camera_Detect_Activity"
+            android:name=".ui.main.camera_detect_activity.ml.drag_object.DragObjectActivity"
             android:exported="false" />
         <activity
-            android:name="com.bhsoft.ar3d.ui.main.MainActivity"
+            android:name=".ui.main.camera_detect_activity.ml.Camera_Detect_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +56,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <meta-data android:name="com.google.ar.core" android:value="required" />
+
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
     </application>
 
 </manifest>

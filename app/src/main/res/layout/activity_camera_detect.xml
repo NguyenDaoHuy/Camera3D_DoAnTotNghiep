@@ -5,11 +5,14 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frameObject"/>
     <RelativeLayout
         android:layout_width="match_parent"
+        android:id="@+id/relative"
         android:layout_height="match_parent">
-
         <android.opengl.GLSurfaceView
             android:id="@+id/surfaceview"
             android:layout_width="fill_parent"
@@ -30,14 +33,6 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_add_white" />
         </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvObject3d"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_above="@+id/btnAddObjectFromGallery"
-            android:layout_margin="10dp" />
-
         <androidx.cardview.widget.CardView
             android:id="@+id/scanButtonCard"
             android:layout_width="100dp"

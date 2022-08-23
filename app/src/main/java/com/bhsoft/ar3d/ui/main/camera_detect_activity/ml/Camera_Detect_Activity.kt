@@ -32,7 +32,6 @@ class Camera_Detect_Activity : AppCompatActivity() {
                 is CameraNotAvailableException -> "Camera not available. Try restarting the app."
                 else -> "Failed to create AR session: $exception"
             }
-            Log.e(TAG, message, exception)
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         }
 

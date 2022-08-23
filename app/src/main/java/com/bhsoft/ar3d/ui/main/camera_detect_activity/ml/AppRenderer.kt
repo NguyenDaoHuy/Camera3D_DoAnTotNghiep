@@ -1,61 +1,47 @@
 package com.bhsoft.ar3d.ui.main.camera_detect_activity.ml
 
+import android.content.Intent
 import android.opengl.Matrix
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.google.ar.core.Anchor
-import com.google.ar.core.Coordinates2d
-import com.google.ar.core.Frame
-import com.google.ar.core.TrackingState
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.helpers.DisplayRotationHelper
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.samplerender.SampleRender
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.samplerender.arcore.BackgroundRenderer
 import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.classfication.DetectedObjectResult
 import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.classfication.GoogleCloudVisionDetector
 import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.classfication.MLKitObjectDetector
 import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.classfication.ObjectDetector
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.drag_object.DragObjectActivity
 import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.render.LabelRender
+import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.render.PointCloudRender
+import com.google.ar.core.Anchor
+import com.google.ar.core.Coordinates2d
+import com.google.ar.core.Frame
+import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.NotYetAvailableException
-import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.helpers.DisplayRotationHelper
-import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.samplerender.SampleRender
-import com.bhsoft.ar3d.ui.main.camera_detect_activity.common.samplerender.arcore.BackgroundRenderer
-import com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.render.PointCloudRender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
-
-
-/**
- * Renders the HelloAR application into using our example Renderer.
- */
 class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserver,
     SampleRender.Renderer, CoroutineScope by MainScope() {
-    companion object {
-        val TAG = "HelloArRenderer"
-    }
-
     lateinit var view: MainActivityView
-
     val displayRotationHelper = DisplayRotationHelper(activity)
     lateinit var backgroundRenderer: BackgroundRenderer
     private val pointCloudRender = PointCloudRender()
     val labelRenderer = LabelRender()
-
     val viewMatrix = FloatArray(16)
     val projectionMatrix = FloatArray(16)
     val viewProjectionMatrix = FloatArray(16)
-
     val arLabeledAnchors = Collections.synchronizedList(mutableListOf<ARLabeledAnchor>())
     var scanButtonWasPressed = false
-
     val mlKitAnalyzer = MLKitObjectDetector(activity)
     val gcpAnalyzer = GoogleCloudVisionDetector(activity)
-
     var currentAnalyzer: ObjectDetector = gcpAnalyzer
     private var timer: Timer? = null
-
     private var checkDetecting = false
 
     override fun onResume(owner: LifecycleOwner) {
@@ -71,19 +57,9 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
 
         labelingObject(view)
 
-        view.btnAddObjectFromGallery.setOnClickListener {
-            Toast.makeText(view.activity, "Add", Toast.LENGTH_SHORT).show()
-        }
 
-
-
-//    view.useCloudMlSwitch.setOnCheckedChangeListener { _, isChecked ->
-//      currentAnalyzer = if (isChecked) gcpAnalyzer else mlKitAnalyzer
-//    }
 
         val gcpConfigured = gcpAnalyzer.credentials != null
-//    view.useCloudMlSwitch.isChecked = gcpConfigured
-//    view.useCloudMlSwitch.isEnabled = gcpConfigured
         currentAnalyzer = if (gcpConfigured) gcpAnalyzer else mlKitAnalyzer
 
         if (!gcpConfigured) {
@@ -110,8 +86,12 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
                 Toast.makeText(view.activity, "Clear", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+        view.btnAddObjectFromGallery.setOnClickListener {
+            Toast.makeText(view.activity, "Add", Toast.LENGTH_SHORT).show()
+            view.activity.startActivity(Intent(view.activity,DragObjectActivity::class.java))
+        }
+    }
     fun labelingObject(view: MainActivityView) {
         timer = Timer()
         timer!!.scheduleAtFixedRate(
@@ -153,7 +133,6 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
         val frame = try {
             session.update()
         } catch (e: CameraNotAvailableException) {
-            Log.e(TAG, "Camera not available during onDrawFrame", e)
             showSnackbar("Camera not available. Try restarting the app.")
             return
         }
@@ -198,13 +177,11 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
         val objects = objectResults
         if (objects != null) {
             objectResults = null
-            Log.e(TAG, "$currentAnalyzer got objects: $objects")
             val anchors = objects.mapNotNull { obj ->
                 obj.label
                 val (atX, atY) = obj.centerCoordinate
                 val anchor =
                     createAnchor(atX.toFloat(), atY.toFloat(), frame) ?: return@mapNotNull null
-                Log.i(TAG, "Created anchor ${anchor.pose} from hit test")
                 ARLabeledAnchor(anchor, obj.label)
             }
             arLabeledAnchors.addAll(anchors)
@@ -229,22 +206,19 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
         }
 
         // Draw labels at their anchor position.
-        for (arDetectedObject in arLabeledAnchors) {
-            val anchor = arDetectedObject.anchor
-            if (anchor.trackingState != TrackingState.TRACKING) continue
-            labelRenderer.draw(
-                render,
-                viewProjectionMatrix,
-                anchor.pose,
-                camera.pose,
-                arDetectedObject.label
-            )
-        }
+            for (arDetectedObject in arLabeledAnchors) {
+                val anchor = arDetectedObject.anchor
+                if (anchor.trackingState != TrackingState.TRACKING) continue
+                labelRenderer.draw(
+                    render,
+                    viewProjectionMatrix,
+                    anchor.pose,
+                    camera.pose,
+                    arDetectedObject.label
+                )
+            }
     }
 
-    /**
-     * Utility method for [Frame.acquireCameraImage] that maps [NotYetAvailableException] to `null`.
-     */
     fun Frame.tryAcquireCameraImage() = try {
         acquireCameraImage()
     } catch (e: NotYetAvailableException) {
@@ -258,9 +232,6 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
 
     private fun hideSnackbar() = activity.view.snackbarHelper.hide(activity)
 
-    /**
-     * Temporary arrays to prevent allocations in [createAnchor].
-     */
     private val convertFloats = FloatArray(4)
     private val convertFloatsOut = FloatArray(4)
 

@@ -40,10 +40,9 @@ class GalleryViewModel @Inject constructor(
         val file = File(filePath)
         val files = file.listFiles()
         //sap xep theo thoi gian chup
-        Arrays.sort(files
-        ) { p0, p1 -> p1!!.lastModified().compareTo(p0!!.lastModified()) }
-
         if (files!=null){
+            Arrays.sort(files
+            ) { p0, p1 -> p1!!.lastModified().compareTo(p0!!.lastModified()) }
             for (file1 :File in files){
                 if (file1.path.endsWith(".png")||file1.path.endsWith(".jpg")){
                     filesImageList!!.add(Pictures(file1.path,file1.name,file1.length()))

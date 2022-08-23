@@ -38,4 +38,5 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector
     abstract fun contributeFolderImageFragment(): FolderImageFragment
 
+
 }

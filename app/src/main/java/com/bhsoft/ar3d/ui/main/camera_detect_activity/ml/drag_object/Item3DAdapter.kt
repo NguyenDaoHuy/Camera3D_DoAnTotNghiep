@@ -25,9 +25,9 @@ class Item3DAdapter(private val inters : IItem3D) : RecyclerView.Adapter<Item3DA
     override fun onBindViewHolder(holder: Item3DViewModel, position: Int) {
         holder.binding.imageView.setImageResource(inters.getImagePath()[position])
         holder.binding.textView.text = inters.getTextName()[position]
-        holder.binding.imageView.setOnClickListener {
-            Common.model = inters.getModelName()[position]
-        }
+//        holder.binding.imageView.setOnClickListener {
+//            Common.model = inters.getModelName()[position]
+//        }
     }
 
     override fun getItemCount(): Int {

@@ -188,20 +188,20 @@ class AppRenderer(val activity: Camera_Detect_Activity) : DefaultLifecycleObserv
             view.post {
 //        view.resetButton.isEnabled = arLabeledAnchors.isNotEmpty()
                 view.setScanningActive(false)
-                when {
-                    objects.isEmpty() && currentAnalyzer == mlKitAnalyzer && !mlKitAnalyzer.hasCustomModel() ->
-                        showSnackbar(
-                            "Default ML Kit classification model returned no results. " +
-                                    "For better classification performance, see the README to configure a custom model."
-                        )
-                    objects.isEmpty() ->
-                        showSnackbar("Classification model returned no results.")
-                    anchors.size != objects.size ->
-                        showSnackbar(
-                            "Objects were classified, but could not be attached to an anchor. " +
-                                    "Try moving your device around to obtain a better understanding of the environment."
-                        )
-                }
+//                when {
+//                    objects.isEmpty() && currentAnalyzer == mlKitAnalyzer && !mlKitAnalyzer.hasCustomModel() ->
+//                        showSnackbar(
+//                            "Default ML Kit classification model returned no results. " +
+//                                    "For better classification performance, see the README to configure a custom model."
+//                        )
+//                    objects.isEmpty() ->
+//                        showSnackbar("Classification model returned no results.")
+//                    anchors.size != objects.size ->
+//                        showSnackbar(
+//                            "Objects were classified, but could not be attached to an anchor. " +
+//                                    "Try moving your device around to obtain a better understanding of the environment."
+//                        )
+//                }
             }
         }
 

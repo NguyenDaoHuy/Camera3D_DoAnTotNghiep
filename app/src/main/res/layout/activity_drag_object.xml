@@ -7,12 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/relativeLayout">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnRemoveObject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_bin_24"
+            android:layout_margin="10dp"/>
 
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/fragment_drag_object"
-                android:name="com.google.ar.sceneform.ux.ArFragment"/>
+        <fragment
+            android:id="@+id/fragment_drag_object"
+            android:name="com.google.ar.sceneform.ux.ArFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
             <HorizontalScrollView
                 android:id="@+id/startHorizontal"
                 android:layout_width="match_parent"
@@ -146,7 +153,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                app:srcCompat="@drawable/ic_stat_name" />
+                android:src="@drawable/ic_plane_node_remove"/>
         </LinearLayout>
 
         <ImageView

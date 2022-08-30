@@ -5,7 +5,8 @@
     tools:context=".ui.main.camera_detect_activity.ml.drag_object.DragObjectActivity">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/relativeLayout">
 
             <fragment
                 android:layout_width="match_parent"
@@ -13,6 +14,7 @@
                 android:id="@+id/fragment_drag_object"
                 android:name="com.google.ar.sceneform.ux.ArFragment"/>
             <HorizontalScrollView
+                android:id="@+id/startHorizontal"
                 android:layout_width="match_parent"
                 android:background="@color/white"
                 android:layout_alignParentBottom="true"
@@ -109,6 +111,52 @@
                         android:id="@+id/wolverine"/>
                 </LinearLayout>
             </HorizontalScrollView>
+        <LinearLayout
+            android:id="@+id/linearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@+id/startHorizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnClear"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:clickable="true"
+                android:src="@drawable/ic_plane_node_remove"
+                android:visibility="gone"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnAdd"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:src="@drawable/ic_plane_node_add"
+                android:clickable="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:visibility="gone"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnDone"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_stat_name" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnRuler"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_above="@+id/startHorizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/icon_ruler2" />
     </RelativeLayout>
 
 </layout>

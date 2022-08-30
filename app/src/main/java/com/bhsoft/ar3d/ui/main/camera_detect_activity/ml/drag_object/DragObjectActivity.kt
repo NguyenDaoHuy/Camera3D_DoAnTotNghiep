@@ -1,17 +1,29 @@
 package com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.drag_object
+import android.content.ClipData
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.DragEvent
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.databinding.ActivityDragObjectBinding
+import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import java.util.*
+import kotlin.collections.ArrayList
 
-class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
+class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLongClickListener {
     private var binding : ActivityDragObjectBinding?=null
     private var arFragment : ArFragment?=null
     private var bearRenderable : ModelRenderable?=null
@@ -32,7 +44,22 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
     private var bookShelfRenderable : ModelRenderable?=null
     private var tvRenderable : ModelRenderable?=null
     private var selected = 1
-    var arrayView: Array<View>?=null
+    private var arrayView: Array<View>?=null
+    private var checkStatus = true
+    private var widthLineRender: ModelRenderable? = null
+    private var heightLineRender: ModelRenderable? = null
+    private lateinit var viewRenderable: ViewRenderable
+    private var pointRender: ModelRenderable? = null
+    private var aimRender: ModelRenderable? = null
+    private val currentAnchorNode = ArrayList<AnchorNode>()
+    private var node2Pos: Vector3? = null
+    private var node1Pos: Vector3? = null
+    private var difference: Vector3? = null
+    private var totalLength = 0f
+    private lateinit var distanceInMeters: CardView
+    private val currentAnchor = ArrayList<Anchor?>()
+    private val labelArray: ArrayList<AnchorNode> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_drag_object)
@@ -40,16 +67,50 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
         setArrayView()
         setOnClickListener()
         setupModel()
-        arFragment!!.setOnTapArPlaneListener { hitResult, _, _ ->
+        dragObject()
+        setOnLongClickListener()
+        arFragment!!.setOnTapArPlaneListener { hitResult,plane, motionEvent ->
+            if(checkStatus){
+                val anchor = hitResult.createAnchor()
+                val anchorNode = AnchorNode(anchor)
+                var distance = anchorNode.localPosition.z * -1
+                Toast.makeText(this,convertFloatToString(distance),Toast.LENGTH_SHORT).show()
+                anchorNode.setParent(arFragment!!.arSceneView.scene)
+                createMode(anchorNode, selected,distance)
+            }else if (!checkStatus){
                 val anchor = hitResult.createAnchor()
                 val anchorNode = AnchorNode(anchor)
                 anchorNode.setParent(arFragment!!.arSceneView.scene)
-                createMode(anchorNode,selected)
+                createPoint(anchorNode)
+            }
+        }
+        clickButton()
+
+//        arFragment!!.arSceneView.scene.addOnUpdateListener {
+//            if(!checkStatus) {
+//              //  touchScreenCenterConstantly()
+//              //  updateDistance()
+//            }else if(checkStatus){
+//
+//            }
+//        }
+    }
+    private fun clickButton(){
+        binding!!.btnRuler.setOnClickListener {
+            checkStatus = false
+            binding!!.linearButton.visibility = View.VISIBLE
+            binding!!.btnRuler.visibility = View.GONE
+            initObjects()
+        }
+        binding!!.btnDone.setOnClickListener {
+            checkStatus = true
+            binding!!.linearButton.visibility = View.GONE
+            binding!!.btnRuler.visibility = View.VISIBLE
+            clearAnchors()
         }
     }
 
     private fun setupModel() {
-
         ModelRenderable.builder()
             .setSource(this,R.raw.bear)
             .build().thenAccept {renderable ->
@@ -137,112 +198,146 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
             }
     }
 
-    private fun createMode(anchorNode: AnchorNode, selected: Int) {
+    private fun createMode(anchorNode: AnchorNode, selected: Int,distance : Float) {
         when (selected) {
             1 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = bearRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             2 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = catRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             3 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = cowRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             4 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = dogRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             5 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = elephantRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             6 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = ferretRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             7 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = hippopotamusRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             8 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = horserRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             9 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = koalarRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             10 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = lionRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             11 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = reindeerRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             12 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = wolverineRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             13 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = tableRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             14 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = chairRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             15 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = lampRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             16 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = bookShelfRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             17 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
                 bear.renderable = tvRenderable
                 bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
             }
         }
+    }
 
+    private fun addDistance(anchorNode: AnchorNode, model: TransformableNode, distance: String) {
+//        ViewRenderable.builder().setView(this,R.layout.distance_animal)
+//            .build()
+//            .thenAccept{ viewRenderable ->
+//                val distanceView = TransformableNode(arFragment!!.transformationSystem)
+//                distanceView.localPosition = Vector3(0F,model.localPosition.y,0F)
+//                distanceView.setParent(anchorNode)
+//                distanceView.renderable = viewRenderable
+//
+//                val txtDistance = viewRenderable!!.view as TextView?
+//                txtDistance!!.text = distance
+//
+//                txtDistance.setOnClickListener {
+//                    anchorNode.setParent(null)
+//                }
+//        }
     }
 
     private fun setOnClickListener() {
@@ -251,14 +346,33 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun setOnLongClickListener(){
+        for (i in 0 until arrayView!!.size) {
+            arrayView!![i].setOnLongClickListener(this@DragObjectActivity)
+        }
+    }
+
     private fun setArrayView() {
-        arrayView = arrayOf(binding!!.bear,binding!!.cat,binding!!.cow,binding!!.dog,binding!!.elephant,binding!!.ferret,
-                            binding!!.hippopotamus,binding!!.horse,binding!!.koalaBear,binding!!.lion,binding!!.reindeer,binding!!.wolverine,
-                            binding!!.table,binding!!.chair,binding!!.lamp,binding!!.bookshelf,binding!!.odltv)
+        arrayView = arrayOf(binding!!.bear,
+            binding!!.cat,
+            binding!!.cow,
+            binding!!.dog,
+            binding!!.elephant,
+            binding!!.ferret,
+            binding!!.hippopotamus,
+            binding!!.horse,
+            binding!!.koalaBear,
+            binding!!.lion,
+            binding!!.reindeer,
+            binding!!.wolverine,
+            binding!!.table,
+            binding!!.chair,
+            binding!!.lamp,
+            binding!!.bookshelf,
+            binding!!.odltv)
     }
 
     override fun onClick(v: View?) {
-
         when (v!!.id) {
             R.id.bear -> {
                 selected = 1
@@ -341,5 +455,275 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun dragObject() {
+        binding!!.relativeLayout.setOnDragListener { view, dragEvent ->
+            when (dragEvent.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    true
+                }
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
 
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+
+    fun touchListener(imgView: ImageView){
+        imgView.setOnTouchListener { view, motionEvent ->
+            val data = ClipData.newPlainText("","")
+            val shadow = View.DragShadowBuilder(imgView)
+            view.startDrag(data,shadow,null,0)
+            return@setOnTouchListener false
+        }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        when (v!!.id) {
+            R.id.bear -> {
+                selected = 1
+                touchListener(binding!!.bear)
+                return false
+            }
+            R.id.cat -> {
+                selected = 2
+                touchListener(binding!!.cat)
+                return false
+            }
+            R.id.cow -> {
+                selected = 3
+                touchListener(binding!!.cow)
+                return false
+            }
+            R.id.dog -> {
+                selected = 4
+                touchListener(binding!!.dog)
+                return false
+            }
+            R.id.elephant -> {
+                selected = 5
+                touchListener(binding!!.elephant)
+                return false
+            }
+            R.id.ferret -> {
+                selected = 6
+                touchListener(binding!!.ferret)
+                return false
+            }
+            R.id.hippopotamus -> {
+                selected = 7
+                touchListener(binding!!.hippopotamus)
+                return false
+            }
+            R.id.horse -> {
+                selected = 8
+                touchListener(binding!!.horse)
+                return false
+            }
+            R.id.koala_bear -> {
+                selected = 9
+                touchListener(binding!!.koalaBear)
+                return false
+            }
+            R.id.lion -> {
+                selected = 10
+                touchListener(binding!!.lion)
+                return false
+            }
+            R.id.reindeer -> {
+                selected = 11
+                touchListener(binding!!.reindeer)
+                return false
+            }
+            R.id.wolverine -> {
+                selected = 12
+                touchListener(binding!!.wolverine)
+                return false
+            }
+            R.id.table -> {
+                selected = 13
+                touchListener(binding!!.table)
+                return false
+            }
+            R.id.chair -> {
+                selected = 14
+                touchListener(binding!!.chair)
+                return false
+            }
+            R.id.lamp -> {
+                selected = 15
+                touchListener(binding!!.lamp)
+                return false
+            }
+            R.id.bookshelf ->{
+                selected = 16
+                touchListener(binding!!.bookshelf)
+                return false
+            }
+            R.id.odltv -> {
+                selected = 17
+                touchListener(binding!!.odltv)
+                return false
+            }
+        }
+        return false
+    }
+
+    fun convertFloatToString(n : Float) : String {
+        val myStr = String.format("%.3f m", n)
+        return myStr
+    }
+
+    private fun initObjects() {
+        MaterialFactory.makeOpaqueWithColor(this, Color(Color.rgb(219, 68, 55)))
+            .thenAccept { material: Material? ->
+                heightLineRender = ShapeFactory.makeCube(Vector3(.015f, 1f, 1f),
+                    Vector3.zero(), material)
+                heightLineRender!!.apply {
+                    isShadowCaster = false
+                    isShadowReceiver = false
+                }
+            }
+        MaterialFactory.makeOpaqueWithColor(this, Color(Color.rgb(23, 107, 230)))
+            .thenAccept { material: Material? ->
+                widthLineRender = ShapeFactory.makeCube(Vector3(.01f, 0f, 1f), Vector3.zero(), material)
+                widthLineRender!!.apply {
+                    isShadowCaster = false
+                    isShadowReceiver = false
+                }
+            }
+
+        MaterialFactory.makeTransparentWithColor(this, Color(Color.rgb(23, 107, 230)))
+            .thenAccept { material: Material? ->
+                pointRender = ShapeFactory.makeCylinder(0.02f, 0.0003f, Vector3.zero(), material)
+                pointRender!!.isShadowCaster = false
+                pointRender!!.isShadowReceiver = false
+            }
+
+        ViewRenderable.builder()
+            .setView(this, R.layout.distance)
+            .build()
+            .thenAccept { renderable: ViewRenderable ->
+                renderable.apply {
+                    isShadowCaster = false
+                    isShadowReceiver = false
+                    verticalAlignment = ViewRenderable.VerticalAlignment.BOTTOM
+                }
+                viewRenderable = renderable
+            }
+
+        Texture.builder()
+            .setSource(this, R.drawable.aim)
+            .build().thenAccept { texture ->
+                MaterialFactory.makeTransparentWithTexture(this, texture)
+                    .thenAccept { material: Material? ->
+                        aimRender = ShapeFactory.makeCylinder(0.08f, 0f, Vector3.zero(), material)
+                        aimRender!!.isShadowCaster = false
+                        aimRender!!.isShadowReceiver = false
+                    }
+            }
+    }
+
+    private fun initTextBoxes(meters: Float, transformableNode: AnchorNode, isFromCreateNewAnchor: Boolean) {
+        if (isFromCreateNewAnchor) {
+            ViewRenderable.builder()
+                .setView(this, R.layout.distance)
+                .build()
+                .thenAccept { renderable: ViewRenderable ->
+                    renderable.apply {
+                        isShadowCaster = false
+                        isShadowReceiver = false
+                        verticalAlignment = ViewRenderable.VerticalAlignment.BOTTOM
+                    }
+                    addDistanceCard(renderable, meters, transformableNode)
+
+                     val txtDistance = renderable!!.view as CardView?
+                     txtDistance!!.setOnClickListener {
+                         transformableNode.setParent(null)
+                         Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show()
+                     }
+                }
+        } else {
+            addDistanceCard(viewRenderable, meters, transformableNode)
+        }
+    }
+
+    private fun addDistanceCard(distanceRenderable: ViewRenderable, meters: Float, transformableNode: AnchorNode) {
+        distanceInMeters = distanceRenderable.view as CardView
+        val metersString: String = if (meters < 1f) {
+            String.format(Locale.ENGLISH, "%.0f", meters * 100) + " cm"
+        } else {
+            String.format(Locale.ENGLISH, "%.2f", meters) + " m"
+        }
+        val tv = distanceInMeters.getChildAt(0) as TextView
+        tv.text = metersString
+        Log.e("meters", metersString)
+        transformableNode.renderable = distanceRenderable
+    }
+
+    fun clearAnchors() {
+        for (i in currentAnchorNode){
+            arFragment!!.arSceneView.scene.removeChild(i)
+        }
+        currentAnchorNode.clear()
+        currentAnchor.clear()
+        labelArray.clear()
+        totalLength = 0f
+    }
+
+    private fun createPoint(anchorNode: AnchorNode){
+        if(currentAnchorNode.size == 0){
+            //create Point 1
+            TransformableNode(arFragment!!.transformationSystem).apply {
+                renderable = pointRender
+                setParent(anchorNode)
+            }
+            val anchor = anchorNode.anchor
+            arFragment!!.arSceneView.scene.addChild(anchorNode)
+            currentAnchor.add(anchor)
+            currentAnchorNode.add(anchorNode)
+            node1Pos = anchorNode?.worldPosition
+        }else if(currentAnchorNode.size == 1){
+            //create Point 2
+            TransformableNode(arFragment!!.transformationSystem).apply {
+                renderable = pointRender
+                setParent(anchorNode)
+            }
+            val anchor = anchorNode.anchor
+            arFragment!!.arSceneView.scene.addChild(anchorNode)
+            currentAnchor.add(anchor)
+            currentAnchorNode.add(anchorNode)
+            node2Pos = anchorNode?.worldPosition
+            //measure distance
+            difference = Vector3.subtract(node1Pos, node2Pos)
+            totalLength += difference!!.length()
+            val rotationFromAToB = Quaternion.lookRotation(difference!!.normalized(), Vector3.up())
+            //setting lines between points
+            AnchorNode().apply {
+                setParent(arFragment!!.arSceneView.scene)
+                this.worldPosition = Vector3.add(node1Pos, node2Pos).scaled(.5f)
+                this.worldRotation = rotationFromAToB
+                localScale = Vector3(1f, 1f, difference!!.length())
+                renderable = widthLineRender
+            }
+            //setting labels with distances
+            labelArray.add(AnchorNode().apply {
+                setParent(arFragment!!.arSceneView.scene)
+                this.worldPosition = Vector3.add(node1Pos, node2Pos).scaled(.5f)
+                initTextBoxes(difference!!.length(), this, true)
+            })
+        }
+    }
 }

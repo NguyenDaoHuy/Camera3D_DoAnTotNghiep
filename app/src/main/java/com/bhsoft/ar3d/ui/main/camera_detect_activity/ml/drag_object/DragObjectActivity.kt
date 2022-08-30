@@ -21,7 +21,6 @@ import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLongClickListener {
     private var binding : ActivityDragObjectBinding?=null
@@ -59,6 +58,9 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
     private lateinit var distanceInMeters: CardView
     private val currentAnchor = ArrayList<Anchor?>()
     private val labelArray: ArrayList<AnchorNode> = ArrayList()
+    private var listLine: ArrayList<AnchorNode> = ArrayList()
+    private var listDistance: ArrayList<AnchorNode> = ArrayList()
+    private var list3dObject: ArrayList<AnchorNode> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +79,7 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
                 Toast.makeText(this,convertFloatToString(distance),Toast.LENGTH_SHORT).show()
                 anchorNode.setParent(arFragment!!.arSceneView.scene)
                 createMode(anchorNode, selected,distance)
+                list3dObject.add(anchorNode)
             }else if (!checkStatus){
                 val anchor = hitResult.createAnchor()
                 val anchorNode = AnchorNode(anchor)
@@ -85,15 +88,6 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             }
         }
         clickButton()
-
-//        arFragment!!.arSceneView.scene.addOnUpdateListener {
-//            if(!checkStatus) {
-//              //  touchScreenCenterConstantly()
-//              //  updateDistance()
-//            }else if(checkStatus){
-//
-//            }
-//        }
     }
     private fun clickButton(){
         binding!!.btnRuler.setOnClickListener {
@@ -107,6 +101,31 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             binding!!.linearButton.visibility = View.GONE
             binding!!.btnRuler.visibility = View.VISIBLE
             clearAnchors()
+        }
+        binding!!.btnRemoveObject.setOnClickListener {
+            if(checkStatus){
+                if(list3dObject.size > 0){
+                    val objectNote = list3dObject.get(list3dObject.size-1)
+                    objectNote.setParent(null)
+                    arFragment!!.arSceneView.scene.removeChild(objectNote)
+                    list3dObject.remove(objectNote)
+                }else{
+                    Toast.makeText(this,"No object !",Toast.LENGTH_SHORT).show()
+                }
+            }else if(!checkStatus){
+                if(listLine.size > 0 && listDistance.size >0){
+                    val lineNote = listLine.get(listLine.size-1)
+                    val distanceNote = listDistance.get(listDistance.size-1)
+                    lineNote.setParent(null)
+                    arFragment!!.arSceneView.scene.removeChild(lineNote)
+                    distanceNote.setParent(null)
+                    arFragment!!.arSceneView.scene.removeChild(distanceNote)
+                    listLine.remove(lineNote)
+                    listDistance.remove(distanceNote)
+                }else{
+                    Toast.makeText(this,"Haven't measured the distance",Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -652,7 +671,7 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
                      val txtDistance = renderable!!.view as CardView?
                      txtDistance!!.setOnClickListener {
                          transformableNode.setParent(null)
-                         Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show()
+                         arFragment!!.arSceneView.scene.removeChild(transformableNode)
                      }
                 }
         } else {
@@ -717,12 +736,14 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
                 this.worldRotation = rotationFromAToB
                 localScale = Vector3(1f, 1f, difference!!.length())
                 renderable = widthLineRender
+                listLine.add(this)
             }
             //setting labels with distances
             labelArray.add(AnchorNode().apply {
                 setParent(arFragment!!.arSceneView.scene)
                 this.worldPosition = Vector3.add(node1Pos, node2Pos).scaled(.5f)
                 initTextBoxes(difference!!.length(), this, true)
+                listDistance.add(this)
             })
         }
     }

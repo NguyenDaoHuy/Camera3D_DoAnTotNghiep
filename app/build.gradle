@@ -250,5 +250,32 @@ sceneform.asset('sampledata/model/tv.obj',
         'sampledata/model/tv.sfa',
         'src/main/res/raw/tv')
 
+sceneform.asset('sampledata/model/Piano.obj',
+        'default',
+        'sampledata/model/Piano.sfa',
+        'src/main/res/raw/piano')
 
+sceneform.asset('sampledata/model/BOSCH WLG.obj',
+        'default',
+        'sampledata/model/BOSCH WLG.sfa',
+        'src/main/res/raw/maygiat')
 
+sceneform.asset('sampledata/model/office_chair.obj',
+        'default',
+        'sampledata/model/office_chair.sfa',
+        'src/main/res/raw/officechair')
+
+sceneform.asset('sampledata/model/BED.obj',
+        'default',
+        'sampledata/model/BED.sfa',
+        'src/main/res/raw/bed')
+
+sceneform.asset('sampledata/model/monitor.obj',
+        'default',
+        'sampledata/model/monitor.sfa',
+        'src/main/res/raw/monitor')
+
+sceneform.asset('sampledata/model/IronMan.obj',
+        'default',
+        'sampledata/model/IronMan.sfa',
+        'src/main/res/raw/ironman')

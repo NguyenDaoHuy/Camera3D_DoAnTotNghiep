@@ -433,7 +433,7 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
         compareImageList = ArrayList()
         val index = pictures.title.indexOf("_")
         val subString = pictures.title.substring(0, index)
-        getCompareImages2(subString,0)
+        getCompareImages3(subString,0)
         Toast.makeText(context,subString,Toast.LENGTH_SHORT).show()
     }
 
@@ -520,6 +520,35 @@ class GalleryImageCropFragment: BaseMvvmFragment<GalleryImageCropCallBack, Galle
                         progressDialog!!.dismiss()
                     }else{
                         getCompareImages2(imageName, possition1)
+                    }
+                }
+            }
+        }
+    }
+    fun getCompareImages3(imageName: String, possition: Int) {
+        val filePath = "/storage/emulated/0/DCIM/ar3d"
+        val file = File(filePath)
+        val files = file.listFiles()
+        if (files != null) {
+            val file1: File = files.get(possition)
+            if (file1.path.endsWith(".png") || file1.path.endsWith(".jpg")) {
+                val file = File(file1.path)
+                val uri: Uri = Uri.fromFile(file)
+                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri)
+                val inputImage = InputImage.fromBitmap(bitmap, 0)
+                var possition1 = possition + 1
+                labeler!!.process(inputImage).addOnSuccessListener { imageLabels ->
+                    for (labels in imageLabels) {
+                        if (labels.text == imageName) {
+                            compareImageList!!.add(Pictures(file1.path, file1.name, file1.length()))
+                            break
+                        }
+                    }
+                    if (possition1 == files.size) {
+                        showDialogImageSearch()
+                        progressDialog!!.dismiss()
+                    } else {
+                        getCompareImages3(imageName, possition1)
                     }
                 }
             }

@@ -165,65 +165,6 @@ dependencies {
     implementation 'com.google.ar.sceneform:core:1.17.1'
 
 }
-sceneform.asset('sampledata/model/bear.fbx',
-                'default',
-                'sampledata/model/bear.sfa',
-                'src/main/res/raw/bear')
-
-sceneform.asset('sampledata/model/cat.fbx',
-        'default',
-        'sampledata/model/cat.sfa',
-        'src/main/res/raw/cat')
-
-sceneform.asset('sampledata/model/cow.fbx',
-        'default',
-        'sampledata/model/cow.sfa',
-        'src/main/res/raw/cow')
-
-sceneform.asset('sampledata/model/dog.fbx',
-        'default',
-        'sampledata/model/dog.sfa',
-        'src/main/res/raw/dog')
-
-sceneform.asset('sampledata/model/elephant.fbx',
-        'default',
-        'sampledata/model/elephant.sfa',
-        'src/main/res/raw/elephant')
-
-sceneform.asset('sampledata/model/ferret.fbx',
-        'default',
-        'sampledata/model/ferret.sfa',
-        'src/main/res/raw/ferret')
-
-sceneform.asset('sampledata/model/hippopotamus.fbx',
-        'default',
-        'sampledata/model/hippopotamus.sfa',
-        'src/main/res/raw/hippopotamus')
-
-sceneform.asset('sampledata/model/wolverine.fbx',
-        'default',
-        'sampledata/model/wolverine.sfa',
-        'src/main/res/raw/wolverine')
-
-sceneform.asset('sampledata/model/horse.fbx',
-        'default',
-        'sampledata/model/horse.sfa',
-        'src/main/res/raw/horse')
-
-sceneform.asset('sampledata/model/koala_bear.fbx',
-        'default',
-        'sampledata/model/koala_bear.sfa',
-        'src/main/res/raw/koala_bear')
-
-sceneform.asset('sampledata/model/lion.fbx',
-        'default',
-        'sampledata/model/lion.sfa',
-        'src/main/res/raw/lion')
-
-sceneform.asset('sampledata/model/reindeer.fbx',
-        'default',
-        'sampledata/model/reindeer.sfa',
-        'src/main/res/raw/reindeer')
 
 sceneform.asset('sampledata/model/table.obj',
         'default',
@@ -279,3 +220,23 @@ sceneform.asset('sampledata/model/IronMan.obj',
         'default',
         'sampledata/model/IronMan.sfa',
         'src/main/res/raw/ironman')
+
+sceneform.asset('sampledata/model/sofa.obj',
+        'default',
+        'sampledata/model/sofa.sfa',
+        'src/main/res/raw/sofa')
+
+sceneform.asset('sampledata/model/Free model Drawer(Final) .obj',
+        'default',
+        'sampledata/model/Free model Drawer(Final) .sfa',
+        'src/main/res/raw/drawbed')
+
+sceneform.asset('sampledata/model/mesa_pc.obj',
+        'default',
+        'sampledata/model/mesa_pc.sfa',
+        'src/main/res/raw/mesapc')
+
+sceneform.asset('sampledata/model/mac laptop.obj',
+        'default',
+        'sampledata/model/mac laptop.sfa',
+        'src/main/res/raw/macbook')

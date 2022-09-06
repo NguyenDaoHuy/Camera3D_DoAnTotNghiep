@@ -51,6 +51,24 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
+                        android:src="@drawable/drawerbed"
+                        android:id="@+id/drawerbed"
+                        android:padding="10dp"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/sofa"
+                        android:id="@+id/sofa"
+                        android:padding="10dp"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/mesapc"
+                        android:id="@+id/mesapc"
+                        android:padding="10dp"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/chair"
                         android:id="@+id/chair"/>
                     <ImageView
@@ -90,69 +108,14 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
+                        android:src="@drawable/macbook"
+                        android:id="@+id/macbook"
+                        android:padding="10dp"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/odltv"
                         android:id="@+id/odltv"/>
-                    <ImageView
-                        android:id="@+id/bear"
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/bear" />
-
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/cat"
-                        android:id="@+id/cat"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/cow"
-                        android:id="@+id/cow"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/dog"
-                        android:id="@+id/dog"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/elephant"
-                        android:id="@+id/elephant"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ferret"
-                        android:id="@+id/ferret"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/hippopotamus"
-                        android:id="@+id/hippopotamus"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/horse"
-                        android:id="@+id/horse"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/reindeer"
-                        android:id="@+id/reindeer"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/koala_bear"
-                        android:id="@+id/koala_bear"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/lion"
-                        android:id="@+id/lion"/>
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/wolverine"
-                        android:id="@+id/wolverine"/>
                 </LinearLayout>
             </HorizontalScrollView>
         <LinearLayout

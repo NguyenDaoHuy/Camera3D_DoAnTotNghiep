@@ -25,18 +25,6 @@ import java.util.*
 class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLongClickListener {
     private var binding : ActivityDragObjectBinding?=null
     private var arFragment : ArFragment?=null
-    private var bearRenderable : ModelRenderable?=null
-    private var catRenderable : ModelRenderable?=null
-    private var dogRenderable : ModelRenderable?=null
-    private var cowRenderable : ModelRenderable?=null
-    private var elephantRenderable : ModelRenderable?=null
-    private var ferretRenderable : ModelRenderable?=null
-    private var hippopotamusRenderable : ModelRenderable?=null
-    private var horserRenderable : ModelRenderable?=null
-    private var koalarRenderable : ModelRenderable?=null
-    private var lionRenderable : ModelRenderable?=null
-    private var reindeerRenderable : ModelRenderable?=null
-    private var wolverineRenderable : ModelRenderable?=null
     private var tableRenderable : ModelRenderable?=null
     private var chairRenderable : ModelRenderable?=null
     private var lampRenderable : ModelRenderable?=null
@@ -48,6 +36,10 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
     private var bedRenderable : ModelRenderable?=null
     private var monitorRenderable : ModelRenderable?=null
     private var ironManRenderable : ModelRenderable?=null
+    private var sofaRenderable : ModelRenderable?=null
+    private var drawerbedRenderable : ModelRenderable?=null
+    private var mesapcRenderable : ModelRenderable?=null
+    private var macbookRenderable : ModelRenderable?=null
     private var selected = 1
     private var arrayView: Array<View>?=null
     private var checkStatus = true
@@ -137,66 +129,6 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
 
     private fun setupModel() {
         ModelRenderable.builder()
-            .setSource(this,R.raw.bear)
-            .build().thenAccept {renderable ->
-                bearRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.cat)
-            .build().thenAccept {renderable ->
-                catRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.cow)
-            .build().thenAccept {renderable ->
-                cowRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.dog)
-            .build().thenAccept {renderable ->
-                dogRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.elephant)
-            .build().thenAccept {renderable ->
-                elephantRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.ferret)
-            .build().thenAccept {renderable ->
-                ferretRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.hippopotamus)
-            .build().thenAccept {renderable ->
-                hippopotamusRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.horse)
-            .build().thenAccept {renderable ->
-                horserRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.lion)
-            .build().thenAccept {renderable ->
-                lionRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.koala_bear)
-            .build().thenAccept {renderable ->
-                koalarRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.reindeer)
-            .build().thenAccept {renderable ->
-                reindeerRenderable = renderable
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.raw.wolverine)
-            .build().thenAccept {renderable ->
-                wolverineRenderable = renderable
-            }
-        ModelRenderable.builder()
             .setSource(this,R.raw.table)
             .build().thenAccept {renderable ->
                 tableRenderable = renderable
@@ -251,6 +183,26 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             .build().thenAccept {renderable ->
                 ironManRenderable = renderable
             }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.sofa)
+            .build().thenAccept {renderable ->
+                sofaRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.drawbed)
+            .build().thenAccept {renderable ->
+                drawerbedRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.mesapc)
+            .build().thenAccept {renderable ->
+                mesapcRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.macbook)
+            .build().thenAccept {renderable ->
+                macbookRenderable = renderable
+            }
     }
 
     private fun createMode(anchorNode: AnchorNode, selected: Int,distance : Float) {
@@ -258,84 +210,28 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             1 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
-                bear.renderable = bearRenderable
+                bear.renderable = sofaRenderable
                 bear.select()
                 addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             2 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
-                bear.renderable = catRenderable
+                bear.renderable = drawerbedRenderable
                 bear.select()
                 addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             3 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
-                bear.renderable = cowRenderable
+                bear.renderable = mesapcRenderable
                 bear.select()
                 addDistance(anchorNode,bear,convertFloatToString(distance))
             }
             4 -> {
                 val bear = TransformableNode(arFragment!!.transformationSystem)
                 bear.setParent(anchorNode)
-                bear.renderable = dogRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            5 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = elephantRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            6 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = ferretRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            7 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = hippopotamusRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            8 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = horserRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            9 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = koalarRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            10 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = lionRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            11 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = reindeerRenderable
-                bear.select()
-                addDistance(anchorNode,bear,convertFloatToString(distance))
-            }
-            12 -> {
-                val bear = TransformableNode(arFragment!!.transformationSystem)
-                bear.setParent(anchorNode)
-                bear.renderable = wolverineRenderable
+                bear.renderable = macbookRenderable
                 bear.select()
                 addDistance(anchorNode,bear,convertFloatToString(distance))
             }
@@ -451,18 +347,10 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
 
     private fun setArrayView() {
         arrayView = arrayOf(
-            binding!!.bear,
-            binding!!.cat,
-            binding!!.cow,
-            binding!!.dog,
-            binding!!.elephant,
-            binding!!.ferret,
-            binding!!.hippopotamus,
-            binding!!.horse,
-            binding!!.koalaBear,
-            binding!!.lion,
-            binding!!.reindeer,
-            binding!!.wolverine,
+            binding!!.macbook,
+            binding!!.mesapc,
+            binding!!.drawerbed,
+            binding!!.sofa,
             binding!!.table,
             binding!!.chair,
             binding!!.lamp,
@@ -472,58 +360,27 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             binding!!.mayGiat,
             binding!!.chairOffice,
             binding!!.bed,
-            binding!!.monitor, binding!!.ironman
+            binding!!.monitor,
+            binding!!.ironman
         )
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.bear -> {
+            R.id.sofa -> {
                 selected = 1
                 setBackground(v.id)
             }
-            R.id.cat -> {
+            R.id.drawerbed -> {
                 selected = 2
                 setBackground(v.id)
             }
-            R.id.cow -> {
+            R.id.mesapc -> {
                 selected = 3
                 setBackground(v.id)
             }
-            R.id.dog -> {
+            R.id.macbook -> {
                 selected = 4
-                setBackground(v.id)
-            }
-            R.id.elephant -> {
-                selected = 5
-                setBackground(v.id)
-            }
-            R.id.ferret -> {
-                selected = 6
-                setBackground(v.id)
-            }
-            R.id.hippopotamus -> {
-                selected = 7
-                setBackground(v.id)
-            }
-            R.id.horse -> {
-                selected = 8
-                setBackground(v.id)
-            }
-            R.id.koala_bear -> {
-                selected = 9
-                setBackground(v.id)
-            }
-            R.id.lion -> {
-                selected = 10
-                setBackground(v.id)
-            }
-            R.id.reindeer -> {
-                selected = 11
-                setBackground(v.id)
-            }
-            R.id.wolverine -> {
-                selected = 12
                 setBackground(v.id)
             }
             R.id.table -> {
@@ -620,66 +477,6 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
 
     override fun onLongClick(v: View?): Boolean {
         when (v!!.id) {
-            R.id.bear -> {
-                selected = 1
-                touchListener(binding!!.bear)
-                return false
-            }
-            R.id.cat -> {
-                selected = 2
-                touchListener(binding!!.cat)
-                return false
-            }
-            R.id.cow -> {
-                selected = 3
-                touchListener(binding!!.cow)
-                return false
-            }
-            R.id.dog -> {
-                selected = 4
-                touchListener(binding!!.dog)
-                return false
-            }
-            R.id.elephant -> {
-                selected = 5
-                touchListener(binding!!.elephant)
-                return false
-            }
-            R.id.ferret -> {
-                selected = 6
-                touchListener(binding!!.ferret)
-                return false
-            }
-            R.id.hippopotamus -> {
-                selected = 7
-                touchListener(binding!!.hippopotamus)
-                return false
-            }
-            R.id.horse -> {
-                selected = 8
-                touchListener(binding!!.horse)
-                return false
-            }
-            R.id.koala_bear -> {
-                selected = 9
-                touchListener(binding!!.koalaBear)
-                return false
-            }
-            R.id.lion -> {
-                selected = 10
-                touchListener(binding!!.lion)
-                return false
-            }
-            R.id.reindeer -> {
-                selected = 11
-                touchListener(binding!!.reindeer)
-                return false
-            }
-            R.id.wolverine -> {
-                selected = 12
-                touchListener(binding!!.wolverine)
-                return false
-            }
             R.id.table -> {
                 selected = 13
                 touchListener(binding!!.table)

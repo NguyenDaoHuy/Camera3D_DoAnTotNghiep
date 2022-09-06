@@ -42,6 +42,12 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
     private var lampRenderable : ModelRenderable?=null
     private var bookShelfRenderable : ModelRenderable?=null
     private var tvRenderable : ModelRenderable?=null
+    private var pianoRenderable : ModelRenderable?=null
+    private var mayGiatRenderable : ModelRenderable?=null
+    private var officeChairRenderable : ModelRenderable?=null
+    private var bedRenderable : ModelRenderable?=null
+    private var monitorRenderable : ModelRenderable?=null
+    private var ironManRenderable : ModelRenderable?=null
     private var selected = 1
     private var arrayView: Array<View>?=null
     private var checkStatus = true
@@ -215,6 +221,36 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             .build().thenAccept {renderable ->
                 tvRenderable = renderable
             }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.piano)
+            .build().thenAccept {renderable ->
+                pianoRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.maygiat)
+            .build().thenAccept {renderable ->
+                mayGiatRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.officechair)
+            .build().thenAccept {renderable ->
+                officeChairRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.bed)
+            .build().thenAccept {renderable ->
+                bedRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.monitor)
+            .build().thenAccept {renderable ->
+                monitorRenderable = renderable
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.raw.ironman)
+            .build().thenAccept {renderable ->
+                ironManRenderable = renderable
+            }
     }
 
     private fun createMode(anchorNode: AnchorNode, selected: Int,distance : Float) {
@@ -338,6 +374,48 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
                 bear.select()
                 addDistance(anchorNode,bear,convertFloatToString(distance))
             }
+            18 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = pianoRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
+            19 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = mayGiatRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
+            20 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = officeChairRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
+            21 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = bedRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
+            22 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = monitorRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
+            23 -> {
+                val bear = TransformableNode(arFragment!!.transformationSystem)
+                bear.setParent(anchorNode)
+                bear.renderable = ironManRenderable
+                bear.select()
+                addDistance(anchorNode,bear,convertFloatToString(distance))
+            }
         }
     }
 
@@ -372,7 +450,8 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
     }
 
     private fun setArrayView() {
-        arrayView = arrayOf(binding!!.bear,
+        arrayView = arrayOf(
+            binding!!.bear,
             binding!!.cat,
             binding!!.cow,
             binding!!.dog,
@@ -388,7 +467,13 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             binding!!.chair,
             binding!!.lamp,
             binding!!.bookshelf,
-            binding!!.odltv)
+            binding!!.odltv,
+            binding!!.piano,
+            binding!!.mayGiat,
+            binding!!.chairOffice,
+            binding!!.bed,
+            binding!!.monitor, binding!!.ironman
+        )
     }
 
     override fun onClick(v: View?) {
@@ -459,6 +544,30 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
             }
             R.id.odltv -> {
                 selected = 17
+                setBackground(v.id)
+            }
+            R.id.piano -> {
+                selected = 18
+                setBackground(v.id)
+            }
+            R.id.mayGiat -> {
+                selected = 19
+                setBackground(v.id)
+            }
+            R.id.chairOffice -> {
+                selected = 20
+                setBackground(v.id)
+            }
+            R.id.bed -> {
+                selected = 21
+                setBackground(v.id)
+            }
+            R.id.monitor -> {
+                selected = 22
+                setBackground(v.id)
+            }
+            R.id.ironman -> {
+                selected = 23
                 setBackground(v.id)
             }
         }

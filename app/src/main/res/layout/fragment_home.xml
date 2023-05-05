@@ -15,7 +15,7 @@
           <RelativeLayout
               android:layout_width="match_parent"
               android:layout_height="0dp"
-              android:layout_weight="8.5">
+              android:layout_weight="9.2">
 
               <androidx.camera.view.PreviewView
                   android:id="@+id/viewFinder"
@@ -55,79 +55,69 @@
                 </RelativeLayout>
             </RelativeLayout>
           </RelativeLayout>
+
           <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="0dp"
-              android:layout_weight="1.5"
+              android:layout_weight="0.8"
               android:orientation="horizontal">
+
               <RelativeLayout
                   android:layout_width="0dp"
                   android:layout_height="match_parent"
                   android:layout_weight="1"
                   android:background="?attr/selectableItemBackground"
-                  android:gravity="center_vertical"
                   android:onClick="@{() -> cameraViewModel.onCLickGallery()}">
+
+<!--                  <View-->
+<!--                      android:layout_width="match_parent"-->
+<!--                      android:layout_height="3dp"-->
+<!--                      android:background="#F46767"/>-->
 
                   <ImageView
                       android:id="@+id/imgGallery"
                       android:layout_width="match_parent"
-                      android:layout_height="50dp"
-                      android:src="@drawable/icon_gallery" />
+                      android:layout_height="25dp"
+                      android:src="@drawable/ic_album_24"
+                      android:layout_marginTop="10dp"/>
                   <TextView
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_below="@+id/imgGallery"
                       android:text="Gallery"
                       android:layout_centerHorizontal="true"
-                      android:textSize="18dp"
+                      android:textSize="14dp"
                       android:textColor="@color/black"
                       android:textStyle="bold"/>
               </RelativeLayout>
+
               <RelativeLayout
                   android:layout_width="0dp"
                   android:layout_height="match_parent"
                   android:layout_weight="1"
-                  android:gravity="center_vertical"
                   android:background="?attr/selectableItemBackground"
                   android:onClick="@{() -> cameraViewModel.onCLickArObject()}">
+
+<!--                  <View-->
+<!--                      android:layout_width="match_parent"-->
+<!--                      android:layout_height="3dp"-->
+<!--                      android:background="#DDDCDC"/>-->
 
                   <ImageView
                       android:id="@+id/imgArObject"
                       android:layout_width="match_parent"
-                      android:layout_height="50dp"
-                      android:src="@drawable/icon_ar_object" />
+                      android:layout_height="25dp"
+                      android:src="@drawable/ic_3d_24"
+                      android:layout_marginTop="10dp"/>
                   <TextView
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_below="@+id/imgArObject"
                       android:text="AR Object"
                       android:layout_centerHorizontal="true"
-                      android:textSize="18dp"
+                      android:textSize="14dp"
                       android:textColor="@color/black"
                       android:textStyle="bold"/>
-              </RelativeLayout>
-              <RelativeLayout
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="center_vertical"
-                  android:background="?attr/selectableItemBackground"
-                  android:onClick="@{() -> cameraViewModel.onCLickShare()}">
-
-                  <ImageView
-                      android:id="@+id/imgShare"
-                      android:layout_width="match_parent"
-                      android:layout_height="50dp"
-                      android:src="@drawable/icon_share" />
-                  <TextView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_below="@+id/imgShare"
-                      android:layout_centerHorizontal="true"
-                      android:text="Share"
-                      android:textColor="@color/black"
-                      android:textSize="18dp"
-                      android:textStyle="bold" />
               </RelativeLayout>
           </LinearLayout>
 

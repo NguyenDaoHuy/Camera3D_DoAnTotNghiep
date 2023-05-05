@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:minHeight="?attr/actionBarSize"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity=""
+            android:text="@string/editphoto"
+            android:textColor="#ffffff" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- ToolBar -->
+    <RelativeLayout
+        android:id="@+id/rlToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+        <ImageView
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edittext_close"
+            android:layout_centerVertical="true"
+            android:padding="20dp"/>
+        <TextView
+            android:id="@+id/titleEdittext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_frame"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+        <RelativeLayout
+            android:id="@+id/btnDone"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="13dp"
+            android:background="@drawable/custom_btn_premission">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_done"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="11dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <!-- End ToolBar -->
+
+    <!-- Image -->
+    <RelativeLayout
+        android:id="@+id/rlback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rvselect"
+        android:layout_below="@+id/rlToolbar">
+
+        <RelativeLayout
+            android:id="@+id/rlphoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:layout_centerInParent="true">
+
+            <jp.co.cyberagent.android.gpuimage.GPUImageView
+                android:id="@+id/gpuview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+            </jp.co.cyberagent.android.gpuimage.GPUImageView>
+
+            <!-- Save -->
+            <ImageView
+                android:id="@+id/ivphoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/ivframe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <!-- End Image -->
+
+    <!--Navigation bottom-->
+    <LinearLayout
+        android:id="@+id/llcontrol"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/rlvBottom"
+        android:background="#161616"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/icframe"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/edit_ic_frame" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:text="@string/edit_frame"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/iceffect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/edit_ic_filter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:text="@string/edit_filter"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ictext"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/edit_ic_text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:text="@string/edit_text"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/icadjust"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/edit_ic_adjustment" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:text="@string/edit_adjustment"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/icsnap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:src="@drawable/edit_ic_sticker" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:text="@string/edit_sticker"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--End Navigation bottom-->
+
+    <!--Navigation bottom old-->
+    <LinearLayout
+        android:id="@+id/llcontrol2"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_above="@+id/adView"
+        android:background="#161616"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="7">
+        <ImageView
+            android:id="@+id/iceffect2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icshape" />
+
+        <ImageView
+            android:id="@+id/icrandom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icrandom" />
+
+        <ImageView
+            android:id="@+id/icsnap2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icsticky" />
+
+        <ImageView
+            android:id="@+id/icabc"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icabc" />
+
+        <ImageView
+            android:id="@+id/icframe2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icframe" />
+
+        <ImageView
+            android:id="@+id/ictext2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/ictext" />
+
+        <ImageView
+            android:id="@+id/icadjust2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/icadjust" />
+    </LinearLayout>
+
+    <!--Layout adjustment-->
+    <LinearLayout
+        android:id="@+id/llchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_above="@+id/rlvBottom"
+        android:background="@color/black"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:weightSum="7">
+            <ImageView
+                android:id="@+id/ivchangeexposure"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditlux"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangecontrast"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditcontrast"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangesharpen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditshapren"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangetemperature"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditwarmth"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangehighlight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/icedithighlights"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangeshadow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditshadow"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivchangevignette"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/iceditvignette"
+                android:background="@drawable/custom_adjustment_button"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/btnCancelAdjustment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edittext_close"
+                    android:layout_centerInParent="true"
+                    android:padding="10dp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/btnDoneAdjustment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="10dp"
+                    android:src="@drawable/edittext_done" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!--End layout adjustment-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvselect"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_above="@+id/llcontrol" />
+
+    <!--Confrim Add Sticker -->
+    <LinearLayout
+        android:id="@+id/confirmAddSticker"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@color/black"
+        android:layout_above="@+id/rlvBottom">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/btnCancelSticker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/edittext_close"
+                android:layout_centerInParent="true"
+                android:padding="10dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/btnDoneSticker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                android:src="@drawable/edittext_done" />
+        </RelativeLayout>
+    </LinearLayout>
+    <!--End confirm Add Sticker -->
+
+    <!-- SeekBar -->
+    <RelativeLayout
+        android:id="@+id/rlslider"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_above="@+id/llchange"
+        android:background="#0D0D0D"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/tvAdjustmentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:text="Exposure"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvslider"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"/>
+
+        <ke.tang.ruler.RulerView
+            android:id="@+id/rulerPicker"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:maxValue="100"
+            app:stepWidth="10dp"
+            app:scaleColor="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/edit_seekbar_background"
+            app:rulerColor="@color/edit_seekbar_background"
+            tools:ignore="MissingClass" />
+    </RelativeLayout>
+    <!--End seekbar -->
+
+    <RelativeLayout
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
+
+    <!--Edit text screen-->
+    <RelativeLayout
+        android:id="@+id/rltext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone"
+        android:layout_above="@+id/rlvBottom">
+        <RelativeLayout
+            android:id="@+id/rlauto"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp">
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/afltext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:text="@string/edit_example"
+                android:textColor="#ffffffff"
+                android:textSize="25sp"
+                autofit:minTextSize="10sp"
+                android:layout_marginTop="10dp"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lltext"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_above="@+id/bottomConfirm"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/ivchangetext"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/edittext_add_text" />
+
+            <ImageView
+                android:id="@+id/ivchangefont"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/edittext_font" />
+
+            <ImageView
+                android:id="@+id/ivchangecolor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/edittext_bucket" />
+
+            <ImageView
+                android:id="@+id/ivcircle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/edittext_shadow" />
+
+            <ImageView
+                android:id="@+id/ivalign"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/edittext_textalign_justifyleft" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvtext"
+            android:layout_width="match_parent"
+            android:layout_height="250sp"
+            android:layout_above="@+id/edtext"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="10dp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edtext"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_above="@+id/lltext"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_edit_text_in_edit_text_screen"
+            android:paddingLeft="10dp"
+            android:textColor="@color/white"/>
+        <LinearLayout
+            android:id="@+id/bottomConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/btnCancelEdText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edittext_close"
+                    android:layout_centerInParent="true"
+                    android:padding="10dp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/btnDoneEdText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edittext_done"
+                    android:layout_centerInParent="true"
+                    android:padding="10dp"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    <!-- End edit text -->
+
+    <ImageView
+        android:id="@+id/ivblur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rlblur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
+        android:layout_below="@+id/ivblur"
+        android:background="#e62a2a2a"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rlvBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <FrameLayout
+            android:id="@+id/adsBannerEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</RelativeLayout>

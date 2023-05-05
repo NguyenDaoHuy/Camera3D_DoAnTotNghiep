@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--Toolbar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_back_gallery" />
+
+        <TextView
+            android:id="@+id/tvImageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Name image"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_share_image_new"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <!-- Toolbar end -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="393dp">
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_dhcnhn"
+            android:layout_marginHorizontal="8dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btnBackToHome"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/custom_btn_premission"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawablePadding="10dp"
+            android:text="Back to home"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/adbNativeSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</LinearLayout>

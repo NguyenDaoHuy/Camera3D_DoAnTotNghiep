@@ -36,7 +36,7 @@ class GalleryViewModel @Inject constructor(
 
     fun getImages(){
         filesImageList!!.clear()
-        val filePath = "/storage/emulated/0/DCIM/ar3d"
+        val filePath = "/storage/emulated/0/DCIM/Đồ án tốt nghiệp"
         val file = File(filePath)
         val files = file.listFiles()
         //sap xep theo thoi gian chup
@@ -48,9 +48,7 @@ class GalleryViewModel @Inject constructor(
                     filesImageList!!.add(Pictures(file1.path,file1.name,file1.length()))
                 }
             }
-
         }
-
         uiEventLiveData.value = GET_DATA_IMAGE_SUCCESS
     }
 

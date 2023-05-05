@@ -17,6 +17,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.databinding.FragmentHome2Binding
+import com.bhsoft.ar3d.ui.activity.SettingsActivity
+import com.bhsoft.ar3d.ui.activity.gallery_edit.GallaryActivity
 import com.bhsoft.ar3d.ui.base.fragment.BaseMvvmFragment
 import com.bhsoft.ar3d.ui.base.viewmodel.BaseViewModel
 import com.bhsoft.ar3d.ui.fragment.camera_fragment.CameraFragment
@@ -31,12 +33,19 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
                 HomeViewModel.ON_CLICK_CAMERA -> goToCamera()
                 HomeViewModel.ON_CLICK_GALLERY -> onCLickGallery()
+                HomeViewModel.ON_CLICK_EDIT -> goToEdit()
+                HomeViewModel.ON_CLICK_SETTING -> goToSetting()
             }
         }
     }
+
+    private fun goToSetting() {
+        val intent = Intent(context,SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun onCLickGallery(){
         goToGallery()
-//        connectPermission()
     }
 
     private fun goToGallery() {
@@ -53,6 +62,11 @@ class HomeFragment : BaseMvvmFragment<HomeCallBack,HomeViewModel>(),HomeCallBack
          fragmentTransaction.replace(R.id.content,cameraFragment)
          fragmentTransaction.addToBackStack(CameraFragment.TAG)
          fragmentTransaction.commit()
+    }
+
+    private fun goToEdit() {
+        val intent = Intent(context,GallaryActivity::class.java)
+        startActivity(intent)
     }
 
     override fun getLayoutMain(): Int {

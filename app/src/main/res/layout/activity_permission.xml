@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#272E33"
+    tools:context=".ui.activity.PermissionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="132dp"
+            android:layout_height="102dp"
+            android:layout_above="@+id/tv1"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/permission_image" />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="6dp"
+            android:text="Permission"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rlAccess"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="6dp"
+            android:text="This app needs access to your photos, media files and camera permissions to provide editing features."
+            android:textColor="#99FFFFFF"
+            android:textSize="16dp" />
+
+        <RelativeLayout
+            android:id="@+id/rlAccess"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_permission_rea">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="Access camera"
+                android:textColor="@color/white"
+                android:textSize="16dp"/>
+
+            <Switch
+                android:id="@+id/switchPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:switchMinWidth="30dp"
+                android:thumb="@drawable/custom_switch"
+                android:trackTint="#FFFFFF"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlAccessc"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_permission_rea">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="Access media files"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <Switch
+                android:id="@+id/switchPermissionGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:switchMinWidth="30dp"
+                android:thumb="@drawable/custom_switch"
+                android:trackTint="#FFFFFF"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/custom_btn_premission">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableRight="@drawable/ic_vector_next"
+                android:drawablePadding="10dp"
+                android:text="CONTINUE"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

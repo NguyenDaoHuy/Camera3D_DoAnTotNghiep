@@ -15,11 +15,19 @@ class HomeViewModel @Inject constructor(
     companion object{
         const val ON_CLICK_CAMERA = 1
         const val ON_CLICK_GALLERY = 2
+        const val ON_CLICK_EDIT = 3
+        const val ON_CLICK_SETTING = 4
     }
     fun onCLickCamera(){
         uiEventLiveData.value = ON_CLICK_CAMERA
     }
     fun onClickGallery(){
         uiEventLiveData.value = ON_CLICK_GALLERY
+    }
+    fun onClickEdit(){
+        uiEventLiveData.value = ON_CLICK_EDIT
+    }
+    fun onClickSetting(){
+        uiEventLiveData.value = ON_CLICK_SETTING
     }
 }

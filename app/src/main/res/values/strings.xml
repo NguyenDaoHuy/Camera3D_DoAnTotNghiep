@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ar3d</string>
+    <string name="app_name">Đồ án tốt nghiệp</string>
     <string name="You_need_open_setting_to_grant_permission">You need open setting to grant permission!</string>
     <string name="Title_confirm_dialog_delete_image">Are you sure you want to delete this photo ?</string>
     <string name="alt_bottom_sheet_chevron">Bottom sheet expandable indicator</string>
@@ -26,6 +26,39 @@
         <item>GPU</item>
         <item>NNAPI</item>
     </string-array>
+
+    <string name="addtext">Add Text</string>
+    <string name="captions">Captions</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="editcontrast">Contrast</string>
+    <string name="editexposure">Exposure</string>
+    <string name="edithightlightsave">Highlights Save</string>
+    <string name="editphoto">Edit Photo</string>
+    <string name="editshadowsave">Shadows Save</string>
+    <string name="editsharpen">Sharpen</string>
+    <string name="edittemperature">Temperature</string>
+    <string name="edittext">Edit Text</string>
+    <string name="editvignette">Vignette</string>
+    <string name="font">Font</string>
+    <string name="frames">Frame</string>
+    <string name="galaxy">Filter</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">OK</string>
+    <string name="more">More</string>
+    <string name="permission_title_rationale">Permission needed</string>
+    <string name="permission_write_storage_rationale">Storage write permission is needed to save the image.</string>
+    <string name="pick_image_intent_chooser_title">Select source</string>
+    <string name="random">Change Blender</string>
+    <string name="stickers">Stickers</string>
+    <string name="edit_frame">Frame</string>
+    <string name="edit_filter">Filter</string>
+    <string name="edit_text">Text</string>
+    <string name="edit_adjustment">Adjustment</string>
+    <string name="edit_sticker">Sticker</string>
+    <string name="edit_example">Example</string>
+    <string name="edit_done">Save</string>
+    <string name="edit_back">You haven’t saved the photo yet, are you sure to come back?</string>
+    <string name="message">Message</string>
 
     <string-array name="models_spinner_titles">
         <item>MobileNet V1</item>

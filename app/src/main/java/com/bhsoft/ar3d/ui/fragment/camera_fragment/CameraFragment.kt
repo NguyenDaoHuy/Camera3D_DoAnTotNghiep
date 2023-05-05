@@ -56,7 +56,6 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
                 BaseViewModel.FINISH_ACTIVITY -> finishActivity()
                 CameraViewModel.ON_CLICK_GALLERY -> goToGallery()
                 CameraViewModel.ON_CLICK_AR_OBJECT -> goToArObject()
-                CameraViewModel.ON_CLICK_SHARE -> goToShare()
                 CameraViewModel.ON_CLICK_TAKE_PHOTO -> onClickTakePhoto()
             }
         }
@@ -211,10 +210,6 @@ class CameraFragment : BaseMvvmFragment<CameraCallBack,CameraViewModel>(),Camera
 
             }
         )
-    }
-
-    private fun goToShare() {
-        initToast("Share")
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

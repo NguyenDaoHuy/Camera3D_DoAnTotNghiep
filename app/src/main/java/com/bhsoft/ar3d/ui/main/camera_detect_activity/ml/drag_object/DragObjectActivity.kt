@@ -1,9 +1,14 @@
 package com.bhsoft.ar3d.ui.main.camera_detect_activity.ml.drag_object
+
 import android.content.ClipData
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.view.DragEvent
+import android.view.PixelCopy
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,14 +18,21 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import com.bhsoft.ar3d.R
 import com.bhsoft.ar3d.databinding.ActivityDragObjectBinding
+import com.bhsoft.ar3d.ui.fragment.camera_fragment.Constants
+import com.bhsoft.ar3d.ui.utils.Utility
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
+
 
 class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLongClickListener {
     private var binding : ActivityDragObjectBinding?=null
@@ -85,6 +97,46 @@ class DragObjectActivity : AppCompatActivity(), View.OnClickListener,View.OnLong
                 createPoint(anchorNode)
             }
         }
+
+        val handler = Handler()
+        binding!!.btnCapture.setOnClickListener {
+            val view: ArSceneView = arFragment!!.getArSceneView()
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            PixelCopy.request(view, bitmap, { copyResult ->
+                if (copyResult === PixelCopy.SUCCESS) {
+                    Utility.share_ = bitmap
+                    val imageSavePath = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DCIM
+                    ).path + "/" + resources.getString(R.string.app_name)
+                    File(imageSavePath).mkdirs()
+                    val str: String = imageSavePath
+                    Utility.shareFile = File(str, SimpleDateFormat(
+                        Constants.FILE_NAME_FORMAT,
+                        Locale.getDefault())
+                        .format(System.currentTimeMillis())  + ".png")
+                    try {
+                        val fileOutputStream = FileOutputStream(Utility.shareFile)
+                        Utility.share_.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)
+                        fileOutputStream.flush()
+                        fileOutputStream.close()
+                        Toast.makeText(this,"Capture Success",Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this,"Capture Failed",Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    // Error
+                }
+            }, handler)
+        }
+//        button.setOnClickListener {
+//            arFragment!!.arSceneView.scene.addOnUpdateListener {
+//                // Chụp ảnh
+//                val bitmap = arFragment!!.arSceneView.takeSnapshot(null)
+//
+//            }
+//        }
         clickButton()
     }
     private fun clickButton(){

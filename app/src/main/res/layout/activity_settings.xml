@@ -1,0 +1,144 @@
+<androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#272E33"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <ImageView
+               android:id="@+id/btnBack"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:layout_marginStart="@dimen/_13sdp"
+               android:layout_marginTop="@dimen/_13sdp"
+               android:layout_marginEnd="@dimen/_13sdp"
+               android:layout_marginBottom="@dimen/_13sdp"
+               android:src="@drawable/ic_back"
+               android:paddingBottom="3dp"
+               app:tint="@color/white" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Setting"
+               android:textColor="@color/white"
+               android:layout_centerVertical="true"
+               android:textStyle="bold"
+               android:textSize="20dp"
+               android:layout_toEndOf="@+id/btnBack"
+               android:paddingVertical="@dimen/_20sdp" />
+       </RelativeLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/setting_liner_background"
+            android:layout_marginHorizontal="@dimen/_10sdp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/tvMoreAPp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_rectangle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_15sdp"
+                    android:text="More app"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:drawableStartCompat="@drawable/baseline_more_vert_24" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:alpha=".35"
+                android:background="@color/grey" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_rectangle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_15sdp"
+                    android:text="Send feedback"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:drawableStartCompat="@drawable/baseline_send_24" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:alpha=".35"
+                android:background="@color/grey" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lnShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_rectangle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_15sdp"
+                    android:text="Share app"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:drawableStartCompat="@drawable/ic_share_white" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:alpha=".35"
+                android:background="@color/grey" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lnRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_rectangle">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_15sdp"
+                    android:text="Rate"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    app:drawableStartCompat="@drawable/baseline_star_rate_24" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

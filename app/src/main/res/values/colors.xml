@@ -12,4 +12,8 @@
     <color name="transparent">#4D000000</color>
     <color name="bottom_sheet_background">#EEEEEE</color>
     <color name="bottom_sheet_text_color">@android:color/black</color>
+    <color name="blue_crop">#007DEF</color>
+    <color name="background_color">#272E33</color>
+    <color name="edit_seekbar_background">#0D0D0D</color>
+    <color name="grey">#B8C2C0</color>
 </resources>

@@ -34,50 +34,9 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
     override fun initComponents() {
         getBindingData().viewModel = mModel
         OpenFragmentUtils.openUserFragment(supportFragmentManager)
-//        showDialog()
         connectPermission()
         CustomCameraPermission()
-//        CustomWritePermission()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            if (Environment.isExternalStorageManager()) {
-//                dialog!!.dismiss()
-//            }
-//        }
     }
-
-//    @SuppressLint("UseRequireInsteadOfGet")
-//    private fun showDialog() {
-//        dialog = Dialog(this)
-//        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog!!.setContentView(R.layout.dialog_confirm)
-//        val txtTitle = dialog!!.findViewById<TextView>(R.id.tv_content)
-//        txtTitle.text = resources.getString(R.string.You_need_open_setting_to_grant_permission)
-//        val window = dialog!!.window ?: return
-//        window.setLayout(
-//            WindowManager.LayoutParams.MATCH_PARENT,
-//            WindowManager.LayoutParams.WRAP_CONTENT
-//        )
-//        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//
-//        val windowAtributes = window.attributes
-//        windowAtributes.gravity = Gravity.CENTER
-//        window.attributes = windowAtributes
-//        if (Gravity.CENTER == Gravity.CENTER) {
-//            dialog!!.setCancelable(true)
-//        } else {
-//            dialog!!.setCancelable(false)
-//        }
-//        val dialogOK = dialog!!.findViewById<Button>(R.id.btn_ok)
-//        val dialogCancel = dialog!!.findViewById<Button>(R.id.btn_cancel)
-//        dialogOK.setOnClickListener {
-//            CustomManagerAppAllFile()
-//            dialog!!.dismiss()
-//        }
-//        dialogCancel.setOnClickListener {
-//            dialog!!.dismiss()
-//        }
-//        dialog!!.show()
-//    }
 
     private fun CustomWritePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -89,27 +48,12 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
         }
     }
     private fun CustomCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),Constants.REQUEST_CODE_PERMISSIONS)
+        }else{
+
         }
     }
-
-//    private fun CustomManagerAppAllFile(){
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            if (!Environment.isExternalStorageManager()){
-//                val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-//                startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
-//            }
-//
-//        }else{
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&  checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                requestPermissions(
-//                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),Constants.REQUEST_READ_EXTERNAL_STORAGE
-//                )
-//            }
-//        }
-//    }
 
     override fun getViewModel(): Class<MainViewModel> {
         return MainViewModel::class.java
@@ -169,22 +113,16 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
         }
     }
 
-    private val storageActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-    {
-            result: ActivityResult? ->
-
+    private val storageActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()){
                 val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
                 startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
-
             }
-
         }else{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&  checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),Constants.REQUEST_READ_EXTERNAL_STORAGE
-
                 )
             }
         }
@@ -194,8 +132,7 @@ class MainActivity : BaseMVVMActivity<MainCallBack, MainViewModel>(), MainCallBa
             Environment.isExternalStorageManager()
         } else {
             val write = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            val read = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE
-            )
+            val read = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             write == PackageManager.PERMISSION_GRANTED && read == PackageManager.PERMISSION_GRANTED
         }
     }

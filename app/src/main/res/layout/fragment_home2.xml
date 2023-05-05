@@ -12,79 +12,197 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_home_3">
+        android:background="#272E33">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đồ án tốt nghiệp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="28dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"/>
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/logo_dhcnhn"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
             android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:layout_marginTop="80dp"
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="fill"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> homeViewMocel.onCLickCamera()}"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#EC6C75"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/icon_camera"
+                            android:layout_width="70dp"
+                            android:layout_height="40dp"
+                            android:layout_marginVertical="5dp"
+                            android:src="@drawable/icon_camera" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_below="@+id/icon_camera"
+                            android:text="Camera"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="16dp"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="fill"
+                    android:layout_marginTop="30dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> homeViewMocel.onClickGallery()}"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFB35D"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/icon_gallery"
+                            android:layout_width="70dp"
+                            android:layout_height="40dp"
+                            android:layout_marginVertical="5dp"
+                            android:src="@drawable/icon_gallery" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_below="@+id/icon_gallery"
+                            android:text="Gallery"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="16dp"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
                 android:layout_gravity="fill"
-                android:onClick="@{() -> homeViewMocel.onCLickCamera()}"
-                app:cardCornerRadius="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{() -> homeViewMocel.onClickEdit()}"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="8dp"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="20dp">
 
                 <RelativeLayout
-                    android:layout_width="120dp"
-                    android:layout_height="120dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#7AC889"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/icon_camera"
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/icon_camera" />
+                        android:id="@+id/icon_edit"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:layout_marginVertical="5dp"
+                        android:src="@drawable/icon_edit_home" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/icon_camera"
-                        android:layout_centerHorizontal="true"
-                        android:text="Camera"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/icon_edit"
+                        android:text="Edit"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="16dp"/>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
                 android:layout_gravity="fill"
-                android:layout_marginTop="40dp"
-                android:onClick="@{() -> homeViewMocel.onClickGallery()}"
-                app:cardCornerRadius="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{() -> homeViewMocel.onClickSetting()}"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="8dp"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="20dp">
 
                 <RelativeLayout
-                    android:layout_width="120dp"
-                    android:layout_height="120dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#38B8AC"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/icon_gallery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/icon_gallery" />
+                        android:id="@+id/icon_chuabiet"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:layout_marginVertical="5dp"
+                        android:src="@drawable/ic_setting" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/icon_gallery"
-                        android:layout_centerHorizontal="true"
-                        android:text="Gallery"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:layout_centerVertical="true"
+                        android:layout_below="@+id/icon_chuabiet"
+                        android:text="Setting"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="16dp"/>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>
